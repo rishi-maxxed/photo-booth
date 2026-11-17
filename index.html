@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#d63a4a">
+  <title>Strip Booth</title>
+  <meta name="description" content="A photo booth in your browser. Take four or five photos, pick a design, and save your strip. Photos never leave your device.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Strip Booth">
+  <link rel="preload" href="fonts/alfa-slab-one-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/lato-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- START -->
+  <section id="screen-start" class="screen start">
+    <header class="start-top">
+      <span class="brand">Strip Booth</span>
+      <button id="btn-settings" class="icon-btn" type="button" aria-label="Booth settings">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+      </button>
+    </header>
+
+    <div class="start-body">
+      <div class="hero">
+        <div class="drape drape-l" aria-hidden="true"></div>
+        <div class="drape drape-r" aria-hidden="true"></div>
+        <div class="slot" aria-hidden="true"></div>
+        <div class="hero-window">
+          <button id="hero-strip" class="hero-strip" type="button" aria-describedby="hero-hint">
+            <canvas id="hero-canvas" width="420" height="1275" role="img" aria-label="Sample photo strip"></canvas>
+          </button>
+        </div>
+        <p id="hero-hint" class="hero-hint">Tap the strip to try another design</p>
+      </div>
+
+      <div class="start-panel">
+        <h1 id="hero-title"><span>Four poses.</span><span>One strip.</span></h1>
+        <p class="lede">Your camera takes the photos. Nothing leaves this device.</p>
+
+        <div class="field">
+          <span class="field-label" id="lbl-shots">Photos per strip</span>
+          <div class="seg" id="seg-shots" role="radiogroup" aria-labelledby="lbl-shots">
+            <button type="button" role="radio" data-value="4" aria-checked="true">4</button>
+            <button type="button" role="radio" data-value="5" aria-checked="false">5</button>
+          </div>
+        </div>
+        <div class="field">
+          <span class="field-label" id="lbl-timer">Countdown</span>
+          <div class="seg" id="seg-timer" role="radiogroup" aria-labelledby="lbl-timer">
+            <button type="button" role="radio" data-value="3" aria-checked="true">3 sec</button>
+            <button type="button" role="radio" data-value="5" aria-checked="false">5 sec</button>
+            <button type="button" role="radio" data-value="10" aria-checked="false">10 sec</button>
+          </div>
+        </div>
+
+        <button id="btn-start" class="btn btn-primary btn-big" type="button">Start the booth</button>
+        <button id="btn-upload" class="btn btn-link" type="button">Use photos from my gallery</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOTH -->
+  <section id="screen-booth" class="screen booth" hidden>
+    <div class="stage" id="stage">
+      <video id="video" playsinline muted autoplay></video>
+      <div class="guide" id="guide" aria-hidden="true" hidden></div>
+      <div class="count" id="count" aria-live="assertive" hidden></div>
+      <div class="flash" id="flash" aria-hidden="true"></div>
+
+      <div class="booth-top">
+        <button id="booth-back" class="icon-btn glass" type="button" aria-label="Back">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+        </button>
+        <div class="bulbs" id="bulbs" role="img" aria-label="Photos taken"></div>
+        <button id="booth-flip" class="icon-btn glass" type="button" aria-label="Switch camera" hidden>
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 7h-3l-2-2H9L7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1z"/><path d="M9.5 13.5a2.8 2.8 0 0 1 5 -1.2M14.5 13.5a2.8 2.8 0 0 1-5 1.2"/></svg>
+        </button>
+      </div>
+
+      <div class="booth-msg" id="booth-msg" hidden>
+        <div class="msg-card" role="alert">
+          <h2 id="msg-title"></h2>
+          <p id="msg-text"></p>
+          <div class="msg-actions">
+            <button id="msg-retry" class="btn btn-primary" type="button">Try again</button>
+            <button id="msg-upload" class="btn btn-secondary" type="button">Choose photos instead</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="booth-bar">
+      <p class="booth-status" id="booth-status" aria-live="polite"></p>
+      <div class="tray" id="tray" aria-label="Your photos"></div>
+      <button id="shutter" class="shutter" type="button" disabled><span id="shutter-label">Start</span></button>
+    </div>
+  </section>
+
+  <!-- EDITOR -->
+  <section id="screen-edit" class="screen edit" hidden>
+    <header class="edit-top">
+      <button id="retake-all" class="btn btn-ghost" type="button">New photos</button>
+      <h2 class="edit-title">Dress your strip</h2>
+      <button id="btn-save" class="btn btn-primary" type="button">Save strip</button>
+    </header>
+
+    <div class="edit-main">
+      <div class="preview" id="preview">
+        <canvas id="preview-canvas" role="img" aria-label="Your photo strip"></canvas>
+      </div>
+
+      <aside class="panel">
+        <div class="tabs" id="tabs" role="tablist" aria-label="Strip options">
+          <button type="button" role="tab" data-tab="layout" aria-selected="true">Layout</button>
+          <button type="button" role="tab" data-tab="design" aria-selected="false" tabindex="-1">Design</button>
+          <button type="button" role="tab" data-tab="frame" aria-selected="false" tabindex="-1">Frame</button>
+          <button type="button" role="tab" data-tab="adjust" aria-selected="false" tabindex="-1">Adjust</button>
+          <button type="button" role="tab" data-tab="filter" aria-selected="false" tabindex="-1">Filter</button>
+          <button type="button" role="tab" data-tab="stickers" aria-selected="false" tabindex="-1">Stickers</button>
+          <button type="button" role="tab" data-tab="text" aria-selected="false" tabindex="-1">Text</button>
+          <button type="button" role="tab" data-tab="photos" aria-selected="false" tabindex="-1">Photos</button>
+        </div>
+
+        <div class="panes">
+          <div class="pane" id="pane-layout" role="tabpanel"><div class="chips" id="chips-layout"></div></div>
+          <div class="pane" id="pane-design" role="tabpanel" hidden><div class="chips" id="chips-design"></div></div>
+          <div class="pane" id="pane-frame" role="tabpanel" hidden><div class="chips" id="chips-frame"></div></div>
+          <div class="pane" id="pane-adjust" role="tabpanel" hidden>
+            <div class="adj-photos" id="adj-photos" role="group" aria-label="Photo to adjust"></div>
+            <p class="hint" id="adjust-hint" aria-live="polite">Drag a photo on your strip to move it. Pinch or scroll to zoom.</p>
+            <div class="adj-sliders">
+              <label class="adj-row"><span>Zoom</span><input id="adj-zoom" type="range" min="100" max="300" step="1" value="100"><output id="adj-zoom-val">100%</output></label>
+              <label class="adj-row"><span>Left / right</span><input id="adj-x" type="range" min="0" max="100" step="1" value="50"></label>
+              <label class="adj-row"><span>Up / down</span><input id="adj-y" type="range" min="0" max="100" step="1" value="50"></label>
+            </div>
+            <div class="sticker-tools">
+              <button type="button" class="btn btn-small" id="adj-reset">Reset this photo</button>
+              <button type="button" class="btn btn-small" id="adj-reset-all">Reset all</button>
+            </div>
+          </div>
+          <div class="pane" id="pane-filter" role="tabpanel" hidden><div class="chips" id="chips-filter"></div></div>
+
+          <div class="pane" id="pane-stickers" role="tabpanel" hidden>
+            <div class="sticker-grid" id="sticker-grid"></div>
+            <p class="hint" id="sticker-hint" aria-live="polite">Tap a sticker to add it to your strip.</p>
+            <div class="sticker-tools">
+              <button type="button" class="btn btn-small" id="st-smaller" disabled>Smaller</button>
+              <button type="button" class="btn btn-small" id="st-larger" disabled>Larger</button>
+              <button type="button" class="btn btn-small" id="st-left" disabled>Turn left</button>
+              <button type="button" class="btn btn-small" id="st-right" disabled>Turn right</button>
+              <button type="button" class="btn btn-small btn-danger" id="st-delete" disabled>Delete</button>
+              <button type="button" class="btn btn-small" id="st-clear" disabled>Clear all</button>
+            </div>
+          </div>
+
+          <div class="pane" id="pane-text" role="tabpanel" hidden>
+            <label class="field-label" for="caption">Caption</label>
+            <input id="caption" class="input" type="text" maxlength="28" placeholder="Add a caption" autocomplete="off" enterkeyhint="done">
+            <label class="switch"><input type="checkbox" id="show-date" checked><span class="track"></span><span>Show today's date</span></label>
+            <span class="field-label">Caption style</span>
+            <div class="font-chips" id="chips-font"></div>
+          </div>
+
+          <div class="pane" id="pane-photos" role="tabpanel" hidden>
+            <div class="shots" id="shots"></div>
+            <label class="switch"><input type="checkbox" id="mirror-saved"><span class="track"></span><span>Mirror saved photos like a selfie</span></label>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+</div>
+
+<!-- Save sheet -->
+<div class="modal" id="modal-export" hidden role="dialog" aria-modal="true" aria-labelledby="export-title">
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-card">
+    <h2 id="export-title">Save your strip</h2>
+    <div class="export-list">
+      <button type="button" class="export-item" id="exp-png" data-autofocus><strong>Download strip</strong><span>PNG image, full quality</span></button>
+      <button type="button" class="export-item" id="exp-share" hidden><strong>Share</strong><span>Send it to another app</span></button>
+      <button type="button" class="export-item" id="exp-gif"><strong>Animated GIF</strong><span>Your photos as a looping clip</span></button>
+      <button type="button" class="export-item" id="exp-sheet"><strong>4 x 6 print sheet</strong><span>Two strips on one page</span></button>
+      <button type="button" class="export-item" id="exp-print"><strong>Print</strong><span>Send the 4 x 6 sheet to a printer</span></button>
+    </div>
+    <button type="button" class="btn btn-link" data-close>Close</button>
+  </div>
+</div>
+
+<!-- Confirm retake -->
+<div class="modal" id="modal-confirm" hidden role="dialog" aria-modal="true" aria-labelledby="confirm-title">
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-card">
+    <h2 id="confirm-title">Take new photos?</h2>
+    <p class="modal-text">Your current photos and stickers will be replaced.</p>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-primary" id="confirm-yes">Take new photos</button>
+      <button type="button" class="btn btn-secondary" data-close data-autofocus>Keep editing</button>
+    </div>
+  </div>
+</div>
+
+<!-- Settings -->
+<div class="modal" id="modal-settings" hidden role="dialog" aria-modal="true" aria-labelledby="settings-title">
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-card">
+    <h2 id="settings-title">Booth settings</h2>
+    <label class="switch"><input type="checkbox" id="set-sound" checked><span class="track"></span><span>Countdown and shutter sounds</span></label>
+    <label class="switch"><input type="checkbox" id="set-flash" checked><span class="track"></span><span>Screen flash when a photo is taken</span></label>
+    <div id="install-row" class="install-row" hidden>
+      <button type="button" class="btn btn-secondary" id="btn-install">Install Strip Booth on this device</button>
+    </div>
+    <p class="modal-text">Photos are processed on your device and are never uploaded.</p>
+    <button type="button" class="btn btn-primary" data-close data-autofocus>Done</button>
+  </div>
+</div>
+
+<div id="toast" role="status" aria-live="polite"></div>
+<div id="print-root" aria-hidden="true"></div>
+
+<noscript><p class="noscript">Strip Booth needs JavaScript. Turn it on in your browser and reload.</p></noscript>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

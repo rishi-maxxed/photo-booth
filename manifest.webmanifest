@@ -1,0 +1,17 @@
+{
+  "name": "Strip Booth",
+  "short_name": "Strip Booth",
+  "description": "A photo booth in your browser. Take four or five photos and save them as a strip.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f5ead3",
+  "theme_color": "#d63a4a",
+  "categories": ["photo", "entertainment"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
