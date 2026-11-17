@@ -6,12 +6,6 @@
 
 A photobooth that lives in your browser. Strike a pose, wait for the countdown, and walk away with a photo strip you actually want to keep.
 
-![Installable PWA](https://img.shields.io/badge/PWA-installable-d63a4a?style=for-the-badge)
-![Works offline](https://img.shields.io/badge/works-offline-1f2a44?style=for-the-badge)
-![No backend](https://img.shields.io/badge/backend-none-eaa72f?style=for-the-badge&labelColor=1f2a44)
-![Desktop and Android](https://img.shields.io/badge/desktop%20%2B%20Android-ready-d63a4a?style=for-the-badge)
-![Vanilla JS](https://img.shields.io/badge/vanilla-JavaScript-1f2a44?style=for-the-badge)
-
 <br>
 
 <img src="docs/desktop-start.jpg" alt="Strip Booth start screen: striped awning, marquee headline and a red velvet curtain around a photo strip" width="100%">
@@ -23,8 +17,6 @@ A photobooth that lives in your browser. Strike a pose, wait for the countdown, 
 ## ✨ The idea
 
 Old photobooths are fun because everything about them is: the curtain, the countdown, the strip that drops out of the slot. Strip Booth brings that to any screen. Open it on a laptop or an Android phone, take four or five photos, and dress your strip with designs, frames, filters and stickers. No sign-up, no app store, nothing to install unless you want to.
-
-The look is **Boardwalk**: a striped awning, a bulb-lit marquee sign, red velvet curtains, ticket-stub buttons and warm cream paper.
 
 > [!NOTE]
 > **Your photos never leave your device.** There is no server, no account and no upload. Photos are processed right in the browser.
@@ -59,7 +51,7 @@ The look is **Boardwalk**: a striped awning, a bulb-lit marquee sign, red velvet
 
 <br>
 
-## 🎨 Dress your strip
+## 🎨 Dress your strip 
 
 <div align="center">
 <img src="docs/desktop-editor.jpg" alt="The editor with a Sunset design strip and a grid of design previews" width="100%">
@@ -67,11 +59,11 @@ The look is **Boardwalk**: a striped awning, a bulb-lit marquee sign, red velvet
 
 <br>
 
-### 20 designs
+### - 20 designs 
 
 <img src="docs/designs.png" alt="All 20 designs: Classic, Midnight, Sunset, Pixel, Polka, Checker, Film, Confetti, Hearts, Vintage paper, Neon, Holographic, Gingham, Comic pop, Vaporwave, Sakura, Blueprint, Watercolor, Candy stripes and Art deco gold" width="100%">
 
-### 9 photo frames that work on any design
+### - 9 photo frames that work on any design
 
 <img src="docs/frames.png" alt="Nine photo frames: Soft round, Gold frame, Stitched, Taped on, Postage stamp, Film cell, Ticket stub, Retro window and Doodle" width="100%">
 
@@ -148,8 +140,12 @@ Strip Booth is a **Progressive Web App**. On Android, open it in Chrome and choo
 
 <br>
 
+---
+
 <div align="center">
 
-**Four poses. One strip. No strings attached.**
+Designed and built by **Rishi Jha**
+
+[GitHub](https://github.com/rishi-maxxed) &nbsp;·&nbsp; [LinkedIn](https://linkedin.com/in/rishi-jha-xyz)
 
 </div>
