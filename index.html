@@ -3,17 +3,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#d63a4a">
-  <title>Strip Booth</title>
+  <meta name="theme-color" content="#f3e9ff">
+  <title>Flickora</title>
   <meta name="description" content="A photo booth in your browser. Take four or five photos, pick a design, and save your strip. Photos never leave your device.">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="Strip Booth">
-  <link rel="preload" href="fonts/alfa-slab-one-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="fonts/lato-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <meta name="apple-mobile-web-app-title" content="Flickora">
+  <link rel="preload" href="fonts/sora-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/inter-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -22,7 +22,7 @@
   <!-- START -->
   <section id="screen-start" class="screen start">
     <header class="start-top">
-      <span class="brand">Strip Booth</span>
+      <span class="brand">Flickora</span>
       <button id="btn-settings" class="icon-btn" type="button" aria-label="Booth settings">
         <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
       </button>
@@ -30,9 +30,6 @@
 
     <div class="start-body">
       <div class="hero">
-        <div class="drape drape-l" aria-hidden="true"></div>
-        <div class="drape drape-r" aria-hidden="true"></div>
-        <div class="slot" aria-hidden="true"></div>
         <div class="hero-window">
           <button id="hero-strip" class="hero-strip" type="button" aria-describedby="hero-hint">
             <canvas id="hero-canvas" width="420" height="1275" role="img" aria-label="Sample photo strip"></canvas>
@@ -42,9 +39,10 @@
       </div>
 
       <div class="start-panel">
-        <h1 id="hero-title"><span>Four poses.</span><span>One strip.</span></h1>
+        <h1 id="hero-title">Memories, caught in seconds.</h1>
         <p class="lede">Your camera takes the photos. Nothing leaves this device.</p>
 
+        <div class="controls">
         <div class="field">
           <span class="field-label" id="lbl-shots">Photos per strip</span>
           <div class="seg" id="seg-shots" role="radiogroup" aria-labelledby="lbl-shots">
@@ -59,6 +57,7 @@
             <button type="button" role="radio" data-value="5" aria-checked="false">5 sec</button>
             <button type="button" role="radio" data-value="10" aria-checked="false">10 sec</button>
           </div>
+        </div>
         </div>
 
         <button id="btn-start" class="btn btn-primary btn-big" type="button">Start the booth</button>
@@ -216,7 +215,7 @@
     <label class="switch"><input type="checkbox" id="set-sound" checked><span class="track"></span><span>Countdown and shutter sounds</span></label>
     <label class="switch"><input type="checkbox" id="set-flash" checked><span class="track"></span><span>Screen flash when a photo is taken</span></label>
     <div id="install-row" class="install-row" hidden>
-      <button type="button" class="btn btn-secondary" id="btn-install">Install Strip Booth on this device</button>
+      <button type="button" class="btn btn-secondary" id="btn-install">Install Flickora on this device</button>
     </div>
     <p class="modal-text">Photos are processed on your device and are never uploaded.</p>
     <button type="button" class="btn btn-primary" data-close data-autofocus>Done</button>
@@ -226,7 +225,7 @@
 <div id="toast" role="status" aria-live="polite"></div>
 <div id="print-root" aria-hidden="true"></div>
 
-<noscript><p class="noscript">Strip Booth needs JavaScript. Turn it on in your browser and reload.</p></noscript>
+<noscript><p class="noscript">Flickora needs JavaScript. Turn it on in your browser and reload.</p></noscript>
 <script type="module" src="js/main.js"></script>
 </body>
 </html>

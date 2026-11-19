@@ -1,7 +1,8 @@
 // Persistent settings (localStorage, wrapped for private-mode safety) and the
 // in-memory session (photos + edit choices).
 
-const KEY = 'stripbooth.settings.v1';
+const KEY = 'flickora.settings.v1';
+const OLD_KEY = 'stripbooth.settings.v1'; // settings saved before the rename
 
 const defaults = {
   shots: 4,          // photos per strip: 4 or 5
@@ -13,7 +14,7 @@ const defaults = {
 
 function load() {
   try {
-    const raw = localStorage.getItem(KEY);
+    const raw = localStorage.getItem(KEY) ?? localStorage.getItem(OLD_KEY);
     return raw ? JSON.parse(raw) : {};
   } catch {
     return {};

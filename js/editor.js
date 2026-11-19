@@ -758,27 +758,27 @@ function bindExport() {
   $('#exp-png').addEventListener('click', (e) =>
     busy(e.currentTarget, 'Preparing...', async () => {
       const blob = await exp.stripBlob(renderState());
-      exp.download(blob, `strip-booth-${exp.stamp()}.png`);
+      exp.download(blob, `flickora-${exp.stamp()}.png`);
       toast('Saved. Check your downloads.');
     })
   );
   $('#exp-share').addEventListener('click', (e) =>
     busy(e.currentTarget, 'Preparing...', async () => {
       const blob = await exp.stripBlob(renderState());
-      await exp.shareBlob(blob, `strip-booth-${exp.stamp()}.png`);
+      await exp.shareBlob(blob, `flickora-${exp.stamp()}.png`);
     })
   );
   $('#exp-gif').addEventListener('click', (e) =>
     busy(e.currentTarget, 'Making GIF...', async (setLabel) => {
       const blob = await exp.gifBlob(renderState(), (p) => setLabel(`Making GIF ${Math.round(p * 100)}%`));
-      exp.download(blob, `strip-booth-${exp.stamp()}.gif`);
+      exp.download(blob, `flickora-${exp.stamp()}.gif`);
       toast('Saved. Check your downloads.');
     })
   );
   $('#exp-sheet').addEventListener('click', (e) =>
     busy(e.currentTarget, 'Preparing...', async () => {
       const blob = await exp.sheetBlob(renderState());
-      exp.download(blob, `strip-booth-4x6-${exp.stamp()}.png`);
+      exp.download(blob, `flickora-4x6-${exp.stamp()}.png`);
       toast('Saved. Check your downloads.');
     })
   );

@@ -11,7 +11,6 @@ import { DESIGNS } from './designs.js';
 import { makeDemoPhotos } from './demo.js';
 import { pickImages, filesToCanvases } from './upload.js';
 
-const WORDS = { 4: 'Four', 5: 'Five' };
 
 // ----- navigation -------------------------------------------------------------------
 
@@ -95,7 +94,6 @@ function drawHero() {
 }
 
 function syncStart() {
-  $('#hero-title').replaceChildren(el('span', {}, `${WORDS[settings.shots]} poses.`), el('span', {}, 'One strip.'));
   for (const [id, key] of [
     ['#seg-shots', 'shots'],
     ['#seg-timer', 'timer']
@@ -171,7 +169,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
 window.addEventListener('appinstalled', () => {
   installEvent = null;
   $('#install-row').hidden = true;
-  toast('Strip Booth is installed.');
+  toast('Flickora is installed.');
 });
 $('#btn-install').addEventListener('click', async () => {
   if (!installEvent) return;

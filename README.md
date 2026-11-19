@@ -1,14 +1,20 @@
 <div align="center">
 
-# 🎞️ Strip Booth
+# 🎞️ Flickora
 
-### Four poses. One strip.
+### Memories, caught in seconds.
 
 A photobooth that lives in your browser. Strike a pose, wait for the countdown, and walk away with a photo strip you actually want to keep.
 
+![Installable PWA](https://img.shields.io/badge/PWA-installable-5b34e0?style=for-the-badge)
+![Works offline](https://img.shields.io/badge/works-offline-231a3d?style=for-the-badge)
+![No backend](https://img.shields.io/badge/backend-none-ffb08a?style=for-the-badge&labelColor=231a3d)
+![Desktop and Android](https://img.shields.io/badge/desktop%20%2B%20Android-ready-5b34e0?style=for-the-badge)
+![Vanilla JS](https://img.shields.io/badge/vanilla-JavaScript-231a3d?style=for-the-badge)
+
 <br>
 
-<img src="docs/desktop-start.jpg" alt="Strip Booth start screen: striped awning, marquee headline and a red velvet curtain around a photo strip" width="100%">
+<img src="docs/desktop-start.jpg" alt="Flickora start screen: lavender and peach glow, frosted glass panels and a photo strip" width="100%">
 
 </div>
 
@@ -16,7 +22,9 @@ A photobooth that lives in your browser. Strike a pose, wait for the countdown, 
 
 ## ✨ The idea
 
-Old photobooths are fun because everything about them is: the curtain, the countdown, the strip that drops out of the slot. Strip Booth brings that to any screen. Open it on a laptop or an Android phone, take four or five photos, and dress your strip with designs, frames, filters and stickers. No sign-up, no app store, nothing to install unless you want to.
+Old photobooths are fun because everything about them is: the countdown, the flash, the strip that drops out of the slot. Flickora brings that to any screen. Open it on a laptop or an Android phone, take four or five photos, and dress your strip with designs, frames, filters and stickers. No sign-up, no app store, nothing to install unless you want to.
+
+The look is **Dusk**: a lavender and peach glow, frosted glass panels, pill-shaped controls and a single violet accent.
 
 > [!NOTE]
 > **Your photos never leave your device.** There is no server, no account and no upload. Photos are processed right in the browser.
@@ -51,7 +59,7 @@ Old photobooths are fun because everything about them is: the curtain, the count
 
 <br>
 
-## 🎨 Dress your strip 
+## 🎨 Dress your strip
 
 <div align="center">
 <img src="docs/desktop-editor.jpg" alt="The editor with a Sunset design strip and a grid of design previews" width="100%">
@@ -59,11 +67,11 @@ Old photobooths are fun because everything about them is: the curtain, the count
 
 <br>
 
-### - 20 designs 
+### 20 designs
 
 <img src="docs/designs.png" alt="All 20 designs: Classic, Midnight, Sunset, Pixel, Polka, Checker, Film, Confetti, Hearts, Vintage paper, Neon, Holographic, Gingham, Comic pop, Vaporwave, Sakura, Blueprint, Watercolor, Candy stripes and Art deco gold" width="100%">
 
-### - 9 photo frames that work on any design
+### 9 photo frames that work on any design
 
 <img src="docs/frames.png" alt="Nine photo frames: Soft round, Gold frame, Stitched, Taped on, Postage stamp, Film cell, Ticket stub, Retro window and Doodle" width="100%">
 
@@ -129,14 +137,22 @@ Every change shows up instantly in the preview, and the saved files match what y
 ## 📱 Made for phones too
 
 <div align="center">
-<img src="docs/mobile-start.jpg" alt="Strip Booth start screen on a phone" width="30%">
+<img src="docs/mobile-start.jpg" alt="Flickora start screen on a phone" width="30%">
 &nbsp;&nbsp;&nbsp;&nbsp;
-<img src="docs/mobile-editor.jpg" alt="Strip Booth editor on a phone" width="30%">
+<img src="docs/mobile-editor.jpg" alt="Flickora editor on a phone" width="30%">
 </div>
 
 <br>
 
-Strip Booth is a **Progressive Web App**. On Android, open it in Chrome and choose **Install app** to get an icon on your home screen. After the first visit it keeps working with no connection at all.
+Flickora is a **Progressive Web App**. On Android, open it in Chrome and choose **Install app** to get an icon on your home screen. After the first visit it keeps working with no connection at all.
+
+<br>
+
+<div align="center">
+
+**Memories, caught in seconds. No strings attached.**
+
+</div>
 
 <br>
 
