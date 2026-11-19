@@ -6,15 +6,15 @@
 
 A photobooth that lives in your browser. Strike a pose, wait for the countdown, and walk away with a photo strip you actually want to keep.
 
-![Installable PWA](https://img.shields.io/badge/PWA-installable-5b34e0?style=for-the-badge)
-![Works offline](https://img.shields.io/badge/works-offline-231a3d?style=for-the-badge)
-![No backend](https://img.shields.io/badge/backend-none-ffb08a?style=for-the-badge&labelColor=231a3d)
-![Desktop and Android](https://img.shields.io/badge/desktop%20%2B%20Android-ready-5b34e0?style=for-the-badge)
-![Vanilla JS](https://img.shields.io/badge/vanilla-JavaScript-231a3d?style=for-the-badge)
+![Installable PWA](https://img.shields.io/badge/PWA-installable-2563ff?style=for-the-badge)
+![Works offline](https://img.shields.io/badge/works-offline-111111?style=for-the-badge)
+![No backend](https://img.shields.io/badge/backend-none-ffd400?style=for-the-badge&labelColor=111111)
+![Desktop and Android](https://img.shields.io/badge/desktop%20%2B%20Android-ready-ff3b4e?style=for-the-badge)
+![Vanilla JS](https://img.shields.io/badge/vanilla-JavaScript-111111?style=for-the-badge)
 
 <br>
 
-<img src="docs/desktop-start.jpg" alt="Flickora start screen: lavender and peach glow, frosted glass panels and a photo strip" width="100%">
+<img src="docs/desktop-start.jpg" alt="Flickora start screen: a comic-book halftone page, a big yellow headline and a photo strip on a blue sunburst" width="100%">
 
 </div>
 
@@ -24,7 +24,7 @@ A photobooth that lives in your browser. Strike a pose, wait for the countdown, 
 
 Old photobooths are fun because everything about them is: the countdown, the flash, the strip that drops out of the slot. Flickora brings that to any screen. Open it on a laptop or an Android phone, take four or five photos, and dress your strip with designs, frames, filters and stickers. No sign-up, no app store, nothing to install unless you want to.
 
-The look is **Dusk**: a lavender and peach glow, frosted glass panels, pill-shaped controls and a single violet accent.
+The look is **Comic Pop**: halftone paper, thick ink outlines, hard shadows, a blue sunburst behind your strip and big burst-style headlines in yellow.
 
 > [!NOTE]
 > **Your photos never leave your device.** There is no server, no account and no upload. Photos are processed right in the browser.
@@ -32,6 +32,12 @@ The look is **Dusk**: a lavender and peach glow, frosted glass panels, pill-shap
 <br>
 
 ## 📸 Take the photos
+
+<div align="center">
+<img src="docs/desktop-booth-countdown.jpg" alt="The booth mid-countdown with a big yellow 3 over the camera view and a dashed framing guide" width="100%">
+</div>
+
+<br>
 
 <table>
 <tr>
@@ -64,6 +70,25 @@ The look is **Dusk**: a lavender and peach glow, frosted glass panels, pill-shap
 <div align="center">
 <img src="docs/desktop-editor.jpg" alt="The editor with a Sunset design strip and a grid of design previews" width="100%">
 </div>
+
+<br>
+
+### A look at every tab
+
+<table>
+<tr>
+<td width="25%" align="center"><img src="docs/desktop-tab-layout.jpg" alt="Layout tab" width="100%"><br><sub><b>Layout</b></sub></td>
+<td width="25%" align="center"><img src="docs/desktop-tab-frame.jpg" alt="Frame tab" width="100%"><br><sub><b>Frame</b></sub></td>
+<td width="25%" align="center"><img src="docs/desktop-tab-adjust.jpg" alt="Adjust tab with zoom and position sliders" width="100%"><br><sub><b>Adjust</b></sub></td>
+<td width="25%" align="center"><img src="docs/desktop-tab-filter.jpg" alt="Filter tab" width="100%"><br><sub><b>Filter</b></sub></td>
+</tr>
+<tr>
+<td width="25%" align="center"><img src="docs/desktop-tab-stickers.jpg" alt="Stickers tab" width="100%"><br><sub><b>Stickers</b></sub></td>
+<td width="25%" align="center"><img src="docs/desktop-tab-text.jpg" alt="Text tab with caption and date options" width="100%"><br><sub><b>Text</b></sub></td>
+<td width="25%" align="center"><img src="docs/desktop-tab-photos.jpg" alt="Photos tab with retake buttons" width="100%"><br><sub><b>Photos</b></sub></td>
+<td width="25%" align="center"><img src="docs/desktop-export.jpg" alt="The Save your strip sheet with PNG, GIF, print sheet and print options" width="100%"><br><sub><b>Save</b></sub></td>
+</tr>
+</table>
 
 <br>
 
@@ -138,8 +163,9 @@ Every change shows up instantly in the preview, and the saved files match what y
 
 <div align="center">
 <img src="docs/mobile-start.jpg" alt="Flickora start screen on a phone" width="30%">
-&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="docs/mobile-booth-countdown.jpg" alt="Countdown on a phone" width="30%">
 <img src="docs/mobile-editor.jpg" alt="Flickora editor on a phone" width="30%">
+
 </div>
 
 <br>
