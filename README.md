@@ -174,6 +174,20 @@ Flickora is a **Progressive Web App**. On Android, open it in Chrome and choose 
 
 <br>
 
+## 🔒 Privacy
+
+Flickora has no server, no accounts, no analytics and no tracking. Photos stay in your browser's memory and are never uploaded. Camera access is used only while you are in the booth.
+
+<br>
+
+## 📄 License
+
+The code, designs, frames, stickers and icons are open source under the [MIT License](LICENSE). Copyright (c) 2026 Rishi Jha.
+
+Bundled fonts and the GIF library keep their own licenses, listed in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
+
+<br>
+
 <div align="center">
 
 **Memories, caught in seconds. No strings attached.**

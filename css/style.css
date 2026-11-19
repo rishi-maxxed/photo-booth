@@ -402,6 +402,7 @@ canvas { display: block; }
 }
 .modal-card h2 { font: 400 36px/1 var(--display); letter-spacing: 1px; text-transform: uppercase; }
 .modal-text { color: var(--ink); font-size: 15px; font-weight: 700; }
+.modal-fine { color: var(--ink-soft); font-size: 13px; font-weight: 700; }
 .modal-actions { display: grid; gap: 12px; }
 @keyframes sheet { from { transform: translateY(24px); opacity: 0; } to { transform: none; opacity: 1; } }
 @media (min-width: 600px) {
