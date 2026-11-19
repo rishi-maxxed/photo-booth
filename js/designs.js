@@ -275,7 +275,16 @@ export const FONTS = [
   { id: 'pixel', name: 'Pixel', family: '"Press Start 2P", monospace', weight: '400', scale: 0.62 },
   { id: 'hand', name: 'Handwritten', family: '"Caveat", cursive', weight: '700', scale: 1.2 },
   { id: 'sans', name: 'Bold', family: '"Bricolage Grotesque", system-ui, sans-serif', weight: '800', scale: 1 },
-  { id: 'mono', name: 'Typewriter', family: 'ui-monospace, "SF Mono", Menlo, Consolas, monospace', weight: '700', scale: 0.9 }
+  { id: 'mono', name: 'Typewriter', family: 'ui-monospace, "SF Mono", Menlo, Consolas, monospace', weight: '700', scale: 0.9 },
+  { id: 'marker', name: 'Marker', family: '"Permanent Marker", cursive', weight: '400', scale: 0.95 },
+  { id: 'lobster', name: 'Lobster', family: '"Lobster", cursive', weight: '400', scale: 1 },
+  { id: 'bubble', name: 'Bubble', family: '"Fredoka", system-ui, sans-serif', weight: '600', scale: 1 },
+  { id: 'chewy', name: 'Chewy', family: '"Chewy", cursive', weight: '400', scale: 1.05 },
+  { id: 'block', name: 'Block', family: '"Bungee", Impact, sans-serif', weight: '400', scale: 0.78 },
+  { id: 'fashion', name: 'Fashion', family: '"Abril Fatface", Georgia, serif', weight: '400', scale: 1 },
+  { id: 'doodle', name: 'Doodle', family: '"Gloria Hallelujah", cursive', weight: '400', scale: 0.95 },
+  { id: 'signature', name: 'Signature', family: '"Sacramento", cursive', weight: '400', scale: 1.4 },
+  { id: 'comic', name: 'Comic', family: '"Bangers", Impact, sans-serif', weight: '400', scale: 1.15 }
 ];
 
 export function getFont(id) {

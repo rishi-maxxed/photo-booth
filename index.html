@@ -35,12 +35,13 @@
             <canvas id="hero-canvas" width="420" height="1275" role="img" aria-label="Sample photo strip"></canvas>
           </button>
         </div>
-        <p id="hero-hint" class="hero-hint">Tap the strip to try another design</p>
+        <span class="burst" aria-hidden="true">Flick!</span>
+        <p id="hero-hint" class="hero-hint">Tap the strip to flip through looks!</p>
       </div>
 
       <div class="start-panel">
         <h1 id="hero-title">Memories, caught in seconds.</h1>
-        <p class="lede">Your camera takes the photos. Nothing leaves this device.</p>
+        <p class="lede"><span>Strike a pose, wait for the flash!</span> <span>Real photobooth fun, right in your browser.</span></p>
 
         <div class="controls">
         <div class="field">
@@ -60,8 +61,9 @@
         </div>
         </div>
 
-        <button id="btn-start" class="btn btn-primary btn-big" type="button">Start the booth</button>
-        <button id="btn-upload" class="btn btn-link" type="button">Use photos from my gallery</button>
+        <button id="btn-start" class="btn btn-primary btn-big" type="button">Flick It!</button>
+        <button id="btn-upload" class="btn btn-link" type="button">Already have some photos? Pick them from gallery.</button>
+        <p class="start-foot">Your photos never leave this device.</p>
       </div>
     </div>
   </section>
@@ -148,6 +150,7 @@
           <div class="pane" id="pane-filter" role="tabpanel" hidden><div class="chips" id="chips-filter"></div></div>
 
           <div class="pane" id="pane-stickers" role="tabpanel" hidden>
+            <div class="packs" id="sticker-packs" role="group" aria-label="Sticker packs"></div>
             <div class="sticker-grid" id="sticker-grid"></div>
             <p class="hint" id="sticker-hint" aria-live="polite">Tap a sticker to add it to your strip.</p>
             <div class="sticker-tools">

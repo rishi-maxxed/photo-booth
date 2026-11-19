@@ -118,8 +118,8 @@ Original, black and white, sepia, vintage, warm, cool, vivid, faded, noir and pi
 </td>
 <td width="33%" valign="top">
 
-### 🎀 24 stickers
-Drag them anywhere, pinch to resize and turn, or use the buttons.
+### 🎀 62 stickers
+24 emoji plus 38 drawn comic stickers in six packs: bursts, booth props, doodles, speech bubbles, tape and stamps, and pixel icons. Drag them anywhere, pinch to resize and turn, or use the buttons.
 
 </td>
 </tr>
@@ -133,7 +133,7 @@ Nobody lines up perfectly. Move and zoom every photo inside its slot with a drag
 <td width="33%" valign="top">
 
 ### ✍️ Captions and dates
-Write your own caption and show today's date, in script, pixel, handwritten, bold or typewriter lettering.
+Write your own caption and show today's date, in 14 lettering styles, from script, marker and signature to bold block, comic and pixel.
 
 </td>
 <td width="33%" valign="top">

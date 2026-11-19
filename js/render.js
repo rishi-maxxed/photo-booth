@@ -3,6 +3,7 @@
 
 import { getLayout } from './layouts.js';
 import { getDesign, getFont } from './designs.js';
+import { stickerImage } from './stickers.js';
 import { applyFilter } from './filters.js';
 import { getFrame, frameRect, drawFramedPhoto, FRAME_REF_W } from './frames.js';
 import { ADJ_MAX_ZOOM } from './store.js';
@@ -283,13 +284,18 @@ export function drawStickers(ctx, stickers, W, H, scale) {
     ctx.save();
     ctx.translate(s.x * W * scale, s.y * H * scale);
     ctx.rotate(s.rot);
-    ctx.font = `${px}px ${EMOJI_FONT}`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
     ctx.shadowColor = 'rgba(0,0,0,0.28)';
     ctx.shadowBlur = 6 * scale;
     ctx.shadowOffsetY = 2 * scale;
-    ctx.fillText(s.char, 0, px * 0.04);
+    if (s.char.startsWith('svg:')) {
+      const img = stickerImage(s.char.slice(4));
+      if (img) ctx.drawImage(img, -px * 0.62, -px * 0.62, px * 1.24, px * 1.24);
+    } else {
+      ctx.font = `${px}px ${EMOJI_FONT}`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(s.char, 0, px * 0.04);
+    }
     ctx.restore();
   }
 }
@@ -345,7 +351,16 @@ export const FONT_LOADS = [
   '56px "Caveat"',
   '700 24px "Bricolage Grotesque"',
   '800 24px "Bricolage Grotesque"',
-  '36px "Shrikhand"'
+  '36px "Shrikhand"',
+  '40px "Permanent Marker"',
+  '40px "Lobster"',
+  '600 40px "Fredoka"',
+  '40px "Chewy"',
+  '40px "Bungee"',
+  '40px "Abril Fatface"',
+  '40px "Gloria Hallelujah"',
+  '40px "Sacramento"',
+  '40px "Bangers"'
 ];
 
 export async function loadFonts() {

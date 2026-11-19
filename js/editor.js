@@ -5,6 +5,7 @@ import { $, $$, el, toast, openModal, closeModal } from './dom.js';
 import { session, settings, saveSettings, getAdj, setAdj, resetAdj, resetAllAdj, ADJ_MAX_ZOOM } from './store.js';
 import { LAYOUTS, getLayout } from './layouts.js';
 import { DESIGNS, FONTS, STICKERS, getDesign } from './designs.js';
+import { STICKER_PACKS, loadStickers, stickerSrc } from './stickers.js';
 import { FILTERS } from './filters.js';
 import { FRAMES } from './frames.js';
 import {
@@ -234,12 +235,8 @@ function build() {
     )
   );
 
-  // stickers
-  $('#sticker-grid').replaceChildren(
-    ...STICKERS.map((ch) =>
-      el('button', { type: 'button', 'aria-label': `Add sticker ${ch}`, text: ch, onclick: () => addSticker(ch) })
-    )
-  );
+  // stickers: emoji plus drawn packs
+  buildStickerPicker();
   $('#st-smaller').addEventListener('click', () => changeSticker((s) => (s.size = Math.max(0.04, s.size * 0.88))));
   $('#st-larger').addEventListener('click', () => changeSticker((s) => (s.size = Math.min(0.6, s.size * 1.14))));
   $('#st-left').addEventListener('click', () => changeSticker((s) => (s.rot -= Math.PI / 12)));
@@ -517,6 +514,56 @@ function panFrom(i, start, dxCss, dyCss) {
   if (cr.slackX > 0.5) patch.px = start.px + (-lx * flip * (cr.sw / area.w)) / cr.slackX;
   if (cr.slackY > 0.5) patch.py = start.py + (-ly * (cr.sh / area.h)) / cr.slackY;
   changeAdj(i, patch);
+}
+
+// ----- sticker picker ---------------------------------------------------------------
+
+let stickerPack = 'emoji';
+
+function buildStickerPicker() {
+  const packs = [{ id: 'emoji', name: 'Emoji' }, ...STICKER_PACKS];
+  $('#sticker-packs').replaceChildren(
+    ...packs.map((p) =>
+      el('button', {
+        type: 'button',
+        class: 'packchip',
+        'data-pack': p.id,
+        'aria-pressed': String(p.id === stickerPack),
+        text: p.name,
+        onclick: () => {
+          stickerPack = p.id;
+          showStickerPack();
+        }
+      })
+    )
+  );
+  showStickerPack();
+  loadStickers().then(showStickerPack);
+}
+
+function showStickerPack() {
+  $$('#sticker-packs .packchip').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.pack === stickerPack)));
+  const grid = $('#sticker-grid');
+  grid.classList.toggle('drawn', stickerPack !== 'emoji');
+  if (stickerPack === 'emoji') {
+    grid.replaceChildren(
+      ...STICKERS.map((ch) =>
+        el('button', { type: 'button', 'aria-label': `Add sticker ${ch}`, text: ch, onclick: () => addSticker(ch) })
+      )
+    );
+    return;
+  }
+  const pack = STICKER_PACKS.find((p) => p.id === stickerPack);
+  grid.replaceChildren(
+    ...pack.items.map((s) => {
+      const src = stickerSrc(s.id);
+      return el(
+        'button',
+        { type: 'button', 'aria-label': `Add sticker ${s.name}`, onclick: () => addSticker('svg:' + s.id) },
+        ...(src ? [el('img', { src, alt: '', draggable: 'false' })] : [])
+      );
+    })
+  );
 }
 
 // ----- stickers -------------------------------------------------------------------
