@@ -19,6 +19,31 @@ const shutter = $('#shutter');
 const shutterLabel = $('#shutter-label');
 const flipBtn = $('#booth-flip');
 const msg = $('#booth-msg');
+const promptEl = $('#prompt');
+
+const PROMPTS = [
+  'Make a silly face!',
+  'Look surprised!',
+  'Best friends pose!',
+  'Blow a kiss!',
+  'Act cool!',
+  'Big smile!',
+  'Strike a superhero pose!',
+  'Pretend you just won!',
+  'Whisper a secret!',
+  'Show your best dance move!',
+  'Make a duck face!',
+  'Look at the camera, then away!'
+];
+
+function shuffled(list) {
+  const a = [...list];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
 
 const camera = new Camera(video);
 let hooks = { onDone() {}, onBack() {} };
@@ -39,6 +64,8 @@ export function init(h) {
   video.addEventListener('loadedmetadata', layoutGuide);
   video.addEventListener('resize', layoutGuide);
   new ResizeObserver(layoutGuide).observe(stage);
+  document.addEventListener('keydown', onSpace);
+  document.addEventListener('keyup', onSpaceUp);
   camera.onEnded = () => {
     if (active && !msgShown) {
       cancel();
@@ -54,6 +81,28 @@ export function init(h) {
       startCamera();
     }
   });
+}
+
+// Desktop: Space starts the countdown. It only starts, so a stray press can't cancel a run.
+function spaceUsable(e) {
+  return (
+    e.code === 'Space' &&
+    active &&
+    !$('#screen-booth').hidden &&
+    !msgShown &&
+    !document.querySelector('.modal:not([hidden])') &&
+    !e.target.closest('input, textarea, select')
+  );
+}
+
+function onSpace(e) {
+  if (!spaceUsable(e)) return;
+  e.preventDefault();
+  if (!e.repeat && !running && !shutter.disabled) run();
+}
+
+function onSpaceUp(e) {
+  if (spaceUsable(e)) e.preventDefault(); // stops a focused button from also "clicking"
 }
 
 export async function open({ retake = -1 } = {}) {
@@ -75,6 +124,7 @@ export function close() {
   token++;
   running = false;
   hideCount();
+  hidePrompt();
   camera.stop();
 }
 
@@ -213,11 +263,13 @@ async function run() {
     renderTray();
   }
   const targets = mode === 'retake' ? [retakeIndex] : Array.from({ length: settings.shots }, (_, i) => i);
+  const ideas = shuffled(PROMPTS);
 
   for (let k = 0; k < targets.length; k++) {
     const idx = targets[k];
     statusEl.textContent = `Pose ${idx + 1} of ${settings.shots}`;
     updateBulbs(idx);
+    showPrompt(ideas[k % ideas.length]);
     for (let t = settings.timer; t > 0; t--) {
       showCount(t);
       sfx.tick(t === 1);
@@ -225,6 +277,7 @@ async function run() {
       if (mine !== token) return;
     }
     hideCount();
+    hidePrompt();
     if (!camera.active) {
       cancel();
       toast('The camera stopped. Try again.');
@@ -257,6 +310,7 @@ function finish() {
 function cancel() {
   token++;
   hideCount();
+  hidePrompt();
   setIdle();
 }
 
@@ -268,6 +322,20 @@ function showCount(n) {
   void countEl.offsetWidth; // restart the animation
   countEl.classList.add('pop');
   countEl.hidden = false;
+}
+
+function showPrompt(text) {
+  if (!settings.prompts) return;
+  promptEl.textContent = text;
+  promptEl.classList.remove('in');
+  void promptEl.offsetWidth;
+  promptEl.classList.add('in');
+  promptEl.hidden = false;
+}
+
+function hidePrompt() {
+  promptEl.hidden = true;
+  promptEl.textContent = '';
 }
 
 function hideCount() {

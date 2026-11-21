@@ -227,6 +227,21 @@ canvas { display: block; }
 }
 .count.pop { animation: pop 0.45s cubic-bezier(0.2, 1.2, 0.3, 1) both; }
 @keyframes pop { from { transform: scale(1.8) rotate(-8deg); opacity: 0; } 35% { opacity: 1; } to { transform: scale(1) rotate(0); opacity: 1; } }
+/* speech bubble with the pose idea */
+.prompt {
+  position: absolute; z-index: 2; left: 50%; top: calc(76px + env(safe-area-inset-top, 0px)); width: min(300px, calc(100% - 40px));
+  padding: 14px 18px; background: #fff; color: var(--ink); border: 4px solid var(--ink); border-radius: 24px;
+  box-shadow: 5px 5px 0 var(--ink); font: 400 26px/1.1 var(--display); letter-spacing: 0.5px; text-align: center;
+  transform: translateX(-50%) rotate(-2deg); pointer-events: none;
+}
+.prompt::after {
+  content: ''; position: absolute; left: 50%; bottom: -15px; width: 24px; height: 24px; background: #fff;
+  border-right: 4px solid var(--ink); border-bottom: 4px solid var(--ink); transform: translateX(-50%) rotate(45deg) skew(8deg, 8deg);
+  border-bottom-right-radius: 4px;
+}
+.prompt.in { animation: bubble 0.4s cubic-bezier(0.2, 1.3, 0.3, 1) both; }
+@keyframes bubble { from { transform: translateX(-50%) rotate(-2deg) scale(0.5); opacity: 0; } to { transform: translateX(-50%) rotate(-2deg) scale(1); opacity: 1; } }
+@media (max-height: 520px) and (orientation: landscape) { .prompt { top: 14px; font-size: 20px; } }
 .flash { position: absolute; z-index: 3; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
 .flash.on { animation: flash 0.5s ease-out both; }
 @keyframes flash { from { opacity: 0.95; } to { opacity: 0; } }
@@ -272,6 +287,12 @@ canvas { display: block; }
 }
 .shutter:active:not(:disabled) { transform: translate(5px, 5px); box-shadow: 0 0 0 var(--ink); }
 .shutter:disabled { opacity: 0.55; }
+.booth-hint { display: none; margin: -2px 0 0; font-size: 14px; font-weight: 700; color: var(--ink); }
+.booth-hint kbd {
+  padding: 1px 8px; border: 2px solid var(--ink); border-radius: 5px; background: #fff; box-shadow: 2px 2px 0 var(--ink);
+  font: 700 13px/1.4 var(--ui);
+}
+@media (hover: hover) and (pointer: fine) { .booth-hint { display: block; } }
 .shutter.running { background: var(--ink); color: var(--yellow); }
 
 @media (max-height: 520px) and (orientation: landscape) {
@@ -292,6 +313,10 @@ canvas { display: block; }
 }
 .edit-top .btn { min-height: 46px; padding: 0 18px; white-space: nowrap; }
 .edit-top .btn-primary { font-size: 22px; }
+.edit-left { display: flex; align-items: center; gap: 8px; }
+.edit-left .icon-btn { width: 46px; height: 46px; flex: none; }
+.edit-left .icon-btn:disabled { opacity: 0.35; box-shadow: none; }
+@media (max-width: 380px) { .edit-top .btn { padding: 0 12px; } .edit-left { gap: 6px; } .edit-left .icon-btn { width: 42px; height: 42px; } }
 .edit-title {
   font: 400 28px/1 var(--display); letter-spacing: 1px; text-transform: uppercase; text-align: center; white-space: nowrap;
   color: var(--ink); transform: rotate(-1.5deg);
@@ -379,7 +404,7 @@ canvas { display: block; }
   .panel {
     width: min(500px, 40vw); max-height: none; margin: 4px 8px 0 0; border: 4px solid var(--ink); border-radius: 6px; box-shadow: 8px 8px 0 var(--ink); padding-bottom: 0;
   }
-  .tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; overflow: visible; padding: 20px 20px 4px; }
+  .tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; overflow: visible; padding: 20px 20px 4px; }
   .tabs button { padding: 0; min-height: 44px; font-size: 16px; }
   .panes { padding: 20px 22px 24px; }
   .chips { display: grid; grid-template-columns: repeat(auto-fill, minmax(116px, 1fr)); overflow: visible; gap: 16px 10px; padding: 6px 6px 8px 2px; }

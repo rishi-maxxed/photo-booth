@@ -47,6 +47,8 @@ The look is **Comic Pop**: halftone paper, thick ink outlines, hard shadows, a b
 - 3, 5 or 10 second countdown
 - 4 or 5 photos per strip
 - Screen flash and synthesized shutter sounds
+- Pose prompts in a speech bubble ("Make a silly face!") that you can switch off in settings
+- Press **Space** on a desktop browser to start the countdown
 - Framing guide so everyone fits
 - Retake any single pose without starting over
 
@@ -77,18 +79,25 @@ The look is **Comic Pop**: halftone paper, thick ink outlines, hard shadows, a b
 
 <table>
 <tr>
+<td width="25%" align="center"><img src="docs/desktop-tab-looks.jpg" alt="Looks tab with six one-tap looks" width="100%"><br><sub><b>Looks</b></sub></td>
 <td width="25%" align="center"><img src="docs/desktop-tab-layout.jpg" alt="Layout tab" width="100%"><br><sub><b>Layout</b></sub></td>
 <td width="25%" align="center"><img src="docs/desktop-tab-frame.jpg" alt="Frame tab" width="100%"><br><sub><b>Frame</b></sub></td>
 <td width="25%" align="center"><img src="docs/desktop-tab-adjust.jpg" alt="Adjust tab with zoom and position sliders" width="100%"><br><sub><b>Adjust</b></sub></td>
-<td width="25%" align="center"><img src="docs/desktop-tab-filter.jpg" alt="Filter tab" width="100%"><br><sub><b>Filter</b></sub></td>
 </tr>
 <tr>
+<td width="25%" align="center"><img src="docs/desktop-tab-filter.jpg" alt="Filter tab" width="100%"><br><sub><b>Filter</b></sub></td>
 <td width="25%" align="center"><img src="docs/desktop-tab-stickers.jpg" alt="Stickers tab" width="100%"><br><sub><b>Stickers</b></sub></td>
 <td width="25%" align="center"><img src="docs/desktop-tab-text.jpg" alt="Text tab with caption and date options" width="100%"><br><sub><b>Text</b></sub></td>
 <td width="25%" align="center"><img src="docs/desktop-tab-photos.jpg" alt="Photos tab with retake buttons" width="100%"><br><sub><b>Photos</b></sub></td>
-<td width="25%" align="center"><img src="docs/desktop-export.jpg" alt="The Save your strip sheet with PNG, GIF, print sheet and print options" width="100%"><br><sub><b>Save</b></sub></td>
+</tr>
+<tr>
+<td width="25%" align="center"><img src="docs/desktop-export.jpg" alt="The Save your strip sheet" width="100%"><br><sub><b>Save</b></sub></td>
 </tr>
 </table>
+
+### ⚡ Quick looks, undo and redo
+
+One tap on **Birthday**, **Date**, **Retro**, **Party**, **Friends** or **Love** sets the design, filter, caption, lettering and stickers together. Change your mind? **Undo** and **Redo** sit next to *New photos*, or use `Ctrl`/`Cmd` + `Z` and `Ctrl` + `Y` on a desktop.
 
 <br>
 
@@ -152,6 +161,7 @@ Every change shows up instantly in the preview, and the saved files match what y
 | Format | What you get |
 | --- | --- |
 | **PNG** | The full-quality strip, ready to post or print |
+| **Story size (9:16)** | A 1080 x 1920 image for Instagram and WhatsApp status |
 | **Animated GIF** | Your photos as a looping clip |
 | **4 x 6 print sheet** | Two strips side by side, sized for a standard photo print |
 | **Share** | Send it straight to another app from the Android share sheet |

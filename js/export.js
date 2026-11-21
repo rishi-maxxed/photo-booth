@@ -32,6 +32,43 @@ export async function stripBlob(state) {
   return canvasToBlob(renderFull(state, scale));
 }
 
+// A 1080 x 1920 story image: the strip on a blue sunburst with a hard comic shadow.
+export async function storyBlob(state) {
+  const SW = 1080;
+  const SH = 1920;
+  const layout = getLayout(state.layout, state.photos.length);
+  const out = document.createElement('canvas');
+  out.width = SW;
+  out.height = SH;
+  const ctx = out.getContext('2d');
+  ctx.fillStyle = '#2563ff';
+  ctx.fillRect(0, 0, SW, SH);
+  const cx = SW / 2;
+  const cy = SH / 2;
+  const rays = 40;
+  ctx.fillStyle = '#4d84ff';
+  for (let i = 0; i < rays; i += 2) {
+    const a0 = (i / rays) * Math.PI * 2;
+    const a1 = ((i + 1) / rays) * Math.PI * 2;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + Math.cos(a0) * 3000, cy + Math.sin(a0) * 3000);
+    ctx.lineTo(cx + Math.cos(a1) * 3000, cy + Math.sin(a1) * 3000);
+    ctx.closePath();
+    ctx.fill();
+  }
+  const k = Math.min((SW * 0.74) / layout.W, (SH * 0.8) / layout.H);
+  const strip = renderFull(state, k);
+  const x = Math.round((SW - strip.width) / 2);
+  const y = Math.round((SH - strip.height) / 2);
+  const edge = 8;
+  ctx.fillStyle = '#111111';
+  ctx.fillRect(x - edge + 18, y - edge + 18, strip.width + edge * 2, strip.height + edge * 2);
+  ctx.fillRect(x - edge, y - edge, strip.width + edge * 2, strip.height + edge * 2);
+  ctx.drawImage(strip, x, y);
+  return canvasToBlob(out);
+}
+
 // A 4 x 6 inch sheet at 300 dpi. Tall strips are printed twice side by side
 // with a cut line; other layouts are centered once.
 export async function sheetBlob(state) {

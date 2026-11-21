@@ -9,6 +9,7 @@ const defaults = {
   timer: 3,          // countdown seconds between shots
   sound: true,
   flash: true,
+  prompts: true,     // show a pose idea during each countdown
   mirrorSaved: false // mirror the saved photos (selfie look) instead of true view
 };
 

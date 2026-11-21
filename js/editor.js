@@ -7,6 +7,7 @@ import { LAYOUTS, getLayout } from './layouts.js';
 import { DESIGNS, FONTS, STICKERS, getDesign } from './designs.js';
 import { STICKER_PACKS, loadStickers, stickerSrc } from './stickers.js';
 import { FILTERS } from './filters.js';
+import { LOOKS } from './looks.js';
 import { FRAMES } from './frames.js';
 import {
   renderBase,
@@ -26,15 +27,15 @@ const canvas = $('#preview-canvas');
 const ctx = canvas.getContext('2d');
 
 let hooks = { onRetake() {}, onRetakeAll() {} };
-let currentTab = 'layout';
+let currentTab = 'looks';
 let built = false;
 let baseCanvas = null;
 let baseKey = '';
 let scale = 1;
 let raf = 0;
 let stickerSeq = 0;
-const dirty = { layout: true, design: true, frame: true, filter: true };
-const thumbs = { layout: [], design: [], frame: [], filter: [] };
+const dirty = { looks: true, layout: true, design: true, frame: true, filter: true };
+const thumbs = { looks: [], layout: [], design: [], frame: [], filter: [] };
 
 // ----- state helpers --------------------------------------------------------
 
@@ -57,6 +58,7 @@ function renderState(over = {}) {
 
 function markDirty(...kinds) {
   for (const k of kinds) dirty[k] = true;
+  dirty.looks = true;
 }
 
 // ----- preview canvas ---------------------------------------------------------
@@ -122,6 +124,7 @@ function draw() {
 
 function schedule() {
   if (!raf) raf = requestAnimationFrame(draw);
+  trackHistory();
 }
 
 function refit() {
@@ -144,6 +147,45 @@ function stripThumb(over) {
   return renderBase(st, k);
 }
 
+function lookThumb(id) {
+  const look = LOOKS.find((l) => l.id === id);
+  const st = renderState({
+    stickers: [],
+    design: look.design,
+    frame: 'design',
+    filter: look.filter,
+    caption: look.caption,
+    font: look.font,
+    showDate: true
+  });
+  const L = getLayout(st.layout, st.photos.length);
+  const k = Math.min(200 / L.H, 280 / L.W);
+  const c = renderBase(st, k);
+  drawStickers(c.getContext('2d'), look.stickers, L.W, L.H, k);
+  return c;
+}
+
+function applyLook(id) {
+  const look = LOOKS.find((l) => l.id === id);
+  if (!look) return;
+  session.design = look.design;
+  session.frame = 'design';
+  session.filter = look.filter;
+  session.caption = look.caption;
+  session.font = look.font;
+  session.fontTouched = true;
+  session.showDate = true;
+  session.stickers = look.stickers.map((s) => ({ ...s, id: ++stickerSeq }));
+  session.selectedId = null;
+  markDirty('layout', 'design', 'frame', 'filter');
+  markPressed();
+  syncText();
+  stickerTools();
+  refit();
+  refreshCurrent();
+  toast(`${look.name} look applied. Undo is next to New photos.`);
+}
+
 function makeThumb(kind, id, label, onPick) {
   const c = document.createElement('canvas');
   const name = el('span', { text: label });
@@ -157,7 +199,8 @@ function refreshThumbs(kind) {
   if (!session.photos.length) return;
   for (const t of thumbs[kind]) {
     let src;
-    if (kind === 'layout') src = stripThumb({ layout: t.id });
+    if (kind === 'looks') src = lookThumb(t.id);
+    else if (kind === 'layout') src = stripThumb({ layout: t.id });
     else if (kind === 'design') src = stripThumb({ design: t.id });
     else if (kind === 'frame') {
       src = renderFramePreview(session.photos[0], session.design, t.id, {
@@ -188,6 +231,7 @@ function build() {
   if (built) return;
   built = true;
 
+  $('#chips-looks').replaceChildren(...LOOKS.map((l) => makeThumb('looks', l.id, l.name, applyLook)));
   $('#chips-layout').replaceChildren(
     ...LAYOUTS.map((l) =>
       makeThumb('layout', l.id, l.name, (id) => {
@@ -321,6 +365,7 @@ function build() {
   });
 
   bindPreviewGestures();
+  bindHistoryKeys();
   bindExport();
   new ResizeObserver(refit).observe(preview);
 }
@@ -339,7 +384,7 @@ function setTab(name) {
 }
 
 function refreshCurrent() {
-  if (['layout', 'design', 'frame', 'filter'].includes(currentTab) && dirty[currentTab]) refreshThumbs(currentTab);
+  if (['looks', 'layout', 'design', 'frame', 'filter'].includes(currentTab) && dirty[currentTab]) refreshThumbs(currentTab);
   const active = $(`#pane-${currentTab} .thumb[aria-pressed=true]`);
   if (active) active.scrollIntoView({ block: 'nearest', inline: 'center' });
   if (built && session.photos.length) syncAdjust();
@@ -538,7 +583,11 @@ function buildStickerPicker() {
     )
   );
   showStickerPack();
-  loadStickers().then(showStickerPack);
+  loadStickers().then(() => {
+    showStickerPack();
+    dirty.looks = true;
+    if (currentTab === 'looks') refreshCurrent();
+  });
 }
 
 function showStickerPack() {
@@ -778,6 +827,113 @@ function bindPreviewGestures() {
   });
 }
 
+// ----- undo and redo ---------------------------------------------------------------
+// Snapshots of every edit choice (not the photos). A change is recorded once it settles, so a
+// slider drag or a burst of typing is one step.
+
+const hist = { undo: [], redo: [], cur: '', timer: 0 };
+
+function snapshot() {
+  return JSON.stringify({
+    layout: session.layout,
+    design: session.design,
+    frame: session.frame,
+    filter: session.filter,
+    caption: session.caption,
+    showDate: session.showDate,
+    font: session.font,
+    fontTouched: session.fontTouched,
+    stickers: session.stickers,
+    adjust: Array.from(session.adjust, (a) => a || null)
+  });
+}
+
+function historyReset() {
+  clearTimeout(hist.timer);
+  hist.undo = [];
+  hist.redo = [];
+  hist.cur = snapshot();
+  syncHistoryButtons();
+}
+
+function trackHistory() {
+  clearTimeout(hist.timer);
+  hist.timer = setTimeout(commitHistory, 350);
+}
+
+function commitHistory() {
+  clearTimeout(hist.timer);
+  const now = snapshot();
+  if (now === hist.cur) return;
+  hist.undo.push(hist.cur);
+  if (hist.undo.length > 80) hist.undo.shift();
+  hist.cur = now;
+  hist.redo = [];
+  syncHistoryButtons();
+}
+
+function syncHistoryButtons() {
+  $('#btn-undo').disabled = !hist.undo.length;
+  $('#btn-redo').disabled = !hist.redo.length;
+}
+
+function restore(json) {
+  const d = JSON.parse(json);
+  session.layout = d.layout;
+  session.design = d.design;
+  session.frame = d.frame;
+  session.filter = d.filter;
+  session.caption = d.caption;
+  session.showDate = d.showDate;
+  session.font = d.font;
+  session.fontTouched = d.fontTouched;
+  session.stickers = d.stickers;
+  session.adjust = d.adjust.map((a) => a || undefined);
+  session.adjRev++;
+  if (!session.stickers.some((s) => s.id === session.selectedId)) session.selectedId = null;
+  hist.cur = json;
+  markDirty('layout', 'design', 'frame', 'filter');
+  markPressed();
+  syncText();
+  buildAdjust();
+  stickerTools();
+  refit();
+  refreshCurrent();
+  syncHistoryButtons();
+}
+
+function undo() {
+  commitHistory();
+  if (!hist.undo.length) return;
+  hist.redo.push(hist.cur);
+  restore(hist.undo.pop());
+}
+
+function redo() {
+  commitHistory();
+  if (!hist.redo.length) return;
+  hist.undo.push(hist.cur);
+  restore(hist.redo.pop());
+}
+
+function bindHistoryKeys() {
+  $('#btn-undo').addEventListener('click', undo);
+  $('#btn-redo').addEventListener('click', redo);
+  document.addEventListener('keydown', (e) => {
+    if ($('#screen-edit').hidden || !(e.ctrlKey || e.metaKey) || e.altKey) return;
+    if (e.target.closest('input, textarea')) return; // text fields keep their own undo
+    if (document.querySelector('.modal:not([hidden])')) return;
+    const k = e.key.toLowerCase();
+    if (k === 'z' && !e.shiftKey) {
+      e.preventDefault();
+      undo();
+    } else if (k === 'y' || (k === 'z' && e.shiftKey)) {
+      e.preventDefault();
+      redo();
+    }
+  });
+}
+
 // ----- export -----------------------------------------------------------------------
 
 async function busy(btn, label, work) {
@@ -806,6 +962,13 @@ function bindExport() {
     busy(e.currentTarget, 'Preparing...', async () => {
       const blob = await exp.stripBlob(renderState());
       exp.download(blob, `flickora-${exp.stamp()}.png`);
+      toast('Saved. Check your downloads.');
+    })
+  );
+  $('#exp-story').addEventListener('click', (e) =>
+    busy(e.currentTarget, 'Preparing...', async () => {
+      const blob = await exp.storyBlob(renderState());
+      exp.download(blob, `flickora-story-${exp.stamp()}.png`);
       toast('Saved. Check your downloads.');
     })
   );
@@ -853,6 +1016,7 @@ export async function open() {
   build();
   markDirty('layout', 'design', 'frame', 'filter');
   baseCanvas = null;
+  historyReset();
   syncText();
   markPressed();
   buildShots();

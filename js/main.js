@@ -102,6 +102,7 @@ function syncStart() {
   }
   $('#set-sound').checked = settings.sound;
   $('#set-flash').checked = settings.flash;
+  $('#set-prompts').checked = settings.prompts;
 }
 
 for (const [id, key] of [
@@ -157,6 +158,11 @@ $('#set-sound').addEventListener('change', (e) => {
 });
 $('#set-flash').addEventListener('change', (e) => {
   settings.flash = e.target.checked;
+  saveSettings();
+});
+
+$('#set-prompts').addEventListener('change', (e) => {
+  settings.prompts = e.target.checked;
   saveSettings();
 });
 

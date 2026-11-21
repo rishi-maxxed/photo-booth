@@ -74,6 +74,7 @@
       <video id="video" playsinline muted autoplay></video>
       <div class="guide" id="guide" aria-hidden="true" hidden></div>
       <div class="count" id="count" aria-live="assertive" hidden></div>
+      <div class="prompt" id="prompt" aria-live="polite" hidden></div>
       <div class="flash" id="flash" aria-hidden="true"></div>
 
       <div class="booth-top">
@@ -102,13 +103,22 @@
       <p class="booth-status" id="booth-status" aria-live="polite"></p>
       <div class="tray" id="tray" aria-label="Your photos"></div>
       <button id="shutter" class="shutter" type="button" disabled><span id="shutter-label">Start</span></button>
+      <p class="booth-hint" aria-hidden="true">Press <kbd>Space</kbd> to start</p>
     </div>
   </section>
 
   <!-- EDITOR -->
   <section id="screen-edit" class="screen edit" hidden>
     <header class="edit-top">
-      <button id="retake-all" class="btn btn-ghost" type="button">New photos</button>
+      <div class="edit-left">
+        <button id="retake-all" class="btn btn-ghost" type="button">New photos</button>
+        <button id="btn-undo" class="icon-btn glass" type="button" aria-label="Undo" title="Undo (Ctrl+Z)" disabled>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg>
+        </button>
+        <button id="btn-redo" class="icon-btn glass" type="button" aria-label="Redo" title="Redo (Ctrl+Y)" disabled>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 14l5-5-5-5"/><path d="M20 9H10a6 6 0 0 0 0 12h3"/></svg>
+        </button>
+      </div>
       <h2 class="edit-title">Dress your strip</h2>
       <button id="btn-save" class="btn btn-primary" type="button">Save strip</button>
     </header>
@@ -120,7 +130,8 @@
 
       <aside class="panel">
         <div class="tabs" id="tabs" role="tablist" aria-label="Strip options">
-          <button type="button" role="tab" data-tab="layout" aria-selected="true">Layout</button>
+          <button type="button" role="tab" data-tab="looks" aria-selected="true">Looks</button>
+          <button type="button" role="tab" data-tab="layout" aria-selected="false" tabindex="-1">Layout</button>
           <button type="button" role="tab" data-tab="design" aria-selected="false" tabindex="-1">Design</button>
           <button type="button" role="tab" data-tab="frame" aria-selected="false" tabindex="-1">Frame</button>
           <button type="button" role="tab" data-tab="adjust" aria-selected="false" tabindex="-1">Adjust</button>
@@ -131,7 +142,8 @@
         </div>
 
         <div class="panes">
-          <div class="pane" id="pane-layout" role="tabpanel"><div class="chips" id="chips-layout"></div></div>
+          <div class="pane" id="pane-looks" role="tabpanel"><div class="chips" id="chips-looks"></div></div>
+          <div class="pane" id="pane-layout" role="tabpanel" hidden><div class="chips" id="chips-layout"></div></div>
           <div class="pane" id="pane-design" role="tabpanel" hidden><div class="chips" id="chips-design"></div></div>
           <div class="pane" id="pane-frame" role="tabpanel" hidden><div class="chips" id="chips-frame"></div></div>
           <div class="pane" id="pane-adjust" role="tabpanel" hidden>
@@ -188,6 +200,7 @@
     <h2 id="export-title">Save your strip</h2>
     <div class="export-list">
       <button type="button" class="export-item" id="exp-png" data-autofocus><strong>Download strip</strong><span>PNG image, full quality</span></button>
+      <button type="button" class="export-item" id="exp-story"><strong>Story size (9:16)</strong><span>For Instagram and WhatsApp status</span></button>
       <button type="button" class="export-item" id="exp-share" hidden><strong>Share</strong><span>Send it to another app</span></button>
       <button type="button" class="export-item" id="exp-gif"><strong>Animated GIF</strong><span>Your photos as a looping clip</span></button>
       <button type="button" class="export-item" id="exp-sheet"><strong>4 x 6 print sheet</strong><span>Two strips on one page</span></button>
@@ -217,6 +230,7 @@
     <h2 id="settings-title">Booth settings</h2>
     <label class="switch"><input type="checkbox" id="set-sound" checked><span class="track"></span><span>Countdown and shutter sounds</span></label>
     <label class="switch"><input type="checkbox" id="set-flash" checked><span class="track"></span><span>Screen flash when a photo is taken</span></label>
+    <label class="switch"><input type="checkbox" id="set-prompts" checked><span class="track"></span><span>Pose prompts during the countdown</span></label>
     <div id="install-row" class="install-row" hidden>
       <button type="button" class="btn btn-secondary" id="btn-install">Install Flickora on this device</button>
     </div>
