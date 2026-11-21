@@ -376,6 +376,23 @@ canvas { display: block; }
 .fontchip[data-font="pixel"] { font-size: 11px; }
 .fontchip[aria-pressed="true"] { background: var(--yellow); box-shadow: 2px 2px 0 var(--ink); }
 #pane-text .field-label { margin-top: 12px; }
+.swatches { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+.swatch {
+  position: relative; width: 44px; height: 44px; padding: 0; border: 3px solid var(--ink); border-radius: 50%;
+  background: var(--c, #fff); color: var(--ink); font: 700 15px/1 var(--ui); cursor: pointer; overflow: hidden;
+}
+.swatch[aria-checked="true"] { box-shadow: 0 0 0 3px #fff, 0 0 0 6px var(--red); }
+.swatch.auto { background: linear-gradient(135deg, #fff 50%, var(--ink) 50%); }
+.swatch.custom { background: conic-gradient(#ff3b4e, #ffd400, #18c28a, #2563ff, #d44bff, #ff3b4e); }
+.swatch.custom input { position: absolute; inset: -8px; width: 64px; height: 64px; opacity: 0; cursor: pointer; }
+.swatch:focus-within { outline: 4px solid var(--blue); outline-offset: 4px; }
+.opt-seg { display: flex; gap: 2px; padding: 3px; margin-top: 6px; border-radius: 6px; background: #fff; border: 3px solid var(--ink); }
+.opt-seg button {
+  flex: 1; min-height: 40px; padding: 0 4px; border: 0; border-radius: 3px; background: transparent; color: var(--ink);
+  font: 700 15px/1 var(--ui);
+}
+.opt-seg button[aria-checked="true"] { background: var(--yellow); box-shadow: 2px 2px 0 var(--ink); }
+#pane-text .adj-row { margin-top: 8px; }
 #pane-text .field-label:first-child { margin-top: 0; }
 #pane-text .switch { margin: 4px 0; }
 

@@ -18,9 +18,12 @@ import {
   photoToCanvas,
   cropRect,
   photoArea,
-  loadFonts
+  loadFonts,
+  TEXT_DEFAULTS
 } from './render.js';
 import * as exp from './export.js';
+
+const TEXT_COLORS = ['#ffffff', '#111111', '#ffd400', '#ff3b4e', '#2563ff', '#18c28a', '#ff8fc0'];
 
 const preview = $('#preview');
 const canvas = $('#preview-canvas');
@@ -49,6 +52,12 @@ function renderState(over = {}) {
     caption: session.caption,
     showDate: session.showDate,
     font: session.font,
+    textColor: session.textColor,
+    textStyle: session.textStyle,
+    textSize: session.textSize,
+    textAlign: session.textAlign,
+    textShape: session.textShape,
+    dateStyle: session.dateStyle,
     mirror: settings.mirrorSaved,
     stickers: session.stickers,
     adjust: session.adjust,
@@ -95,6 +104,12 @@ function baseFingerprint() {
     session.caption,
     session.showDate,
     session.font,
+    session.textColor,
+    session.textStyle,
+    session.textSize,
+    session.textAlign,
+    session.textShape,
+    session.dateStyle,
     settings.mirrorSaved,
     canvas.width,
     canvas.height
@@ -156,7 +171,8 @@ function lookThumb(id) {
     filter: look.filter,
     caption: look.caption,
     font: look.font,
-    showDate: true
+    showDate: true,
+    ...TEXT_DEFAULTS
   });
   const L = getLayout(st.layout, st.photos.length);
   const k = Math.min(200 / L.H, 280 / L.W);
@@ -175,6 +191,7 @@ function applyLook(id) {
   session.font = look.font;
   session.fontTouched = true;
   session.showDate = true;
+  Object.assign(session, TEXT_DEFAULTS);
   session.stickers = look.stickers.map((s) => ({ ...s, id: ++stickerSeq }));
   session.selectedId = null;
   markDirty('layout', 'design', 'frame', 'filter');
@@ -317,6 +334,38 @@ function build() {
     session.caption = e.target.value;
     schedule();
   });
+  const sw = $('#text-swatches');
+  sw.replaceChildren(
+    el('button', { type: 'button', class: 'swatch auto', role: 'radio', 'data-c': 'auto', 'aria-label': 'Match the design', title: 'Match the design' }),
+    ...TEXT_COLORS.map((c) => el('button', { type: 'button', class: 'swatch', role: 'radio', 'data-c': c, 'aria-label': `Colour ${c}`, style: `--c:${c}` })),
+    el('label', { class: 'swatch custom', role: 'radio', 'data-c': 'custom', title: 'Pick any colour' }, el('input', { type: 'color', id: 'text-custom', value: '#ff3b4e', 'aria-label': 'Custom text colour' }))
+  );
+  sw.addEventListener('click', (ev) => {
+    const b = ev.target.closest('button.swatch');
+    if (!b) return;
+    session.textColor = b.dataset.c === 'auto' ? null : b.dataset.c;
+    syncText();
+    schedule();
+  });
+  $('#text-custom').addEventListener('input', (ev) => {
+    session.textColor = ev.target.value;
+    syncText();
+    schedule();
+  });
+  $$('#pane-text .opt-seg').forEach((seg) =>
+    seg.addEventListener('click', (ev) => {
+      const b = ev.target.closest('button');
+      if (!b) return;
+      session[seg.dataset.opt] = b.dataset.v;
+      syncText();
+      schedule();
+    })
+  );
+  $('#text-size').addEventListener('input', (ev) => {
+    session.textSize = Number(ev.target.value) / 100;
+    syncText();
+    schedule();
+  });
   $('#show-date').addEventListener('change', (e) => {
     session.showDate = e.target.checked;
     schedule();
@@ -395,6 +444,17 @@ function syncText() {
   $('#show-date').checked = session.showDate;
   $('#mirror-saved').checked = settings.mirrorSaved;
   $$('#chips-font .fontchip').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.font === session.font)));
+  $$('#pane-text .opt-seg').forEach((seg) => {
+    for (const b of seg.querySelectorAll('button')) b.setAttribute('aria-checked', String(b.dataset.v === session[seg.dataset.opt]));
+  });
+  $('#text-size').value = Math.round(session.textSize * 100);
+  $('#text-size-val').textContent = `${Math.round(session.textSize * 100)}%`;
+  const known = TEXT_COLORS.some((c) => c === session.textColor);
+  $$('#text-swatches .swatch').forEach((b) => {
+    const v = b.dataset.c === 'auto' ? null : b.dataset.c === 'custom' ? (known || session.textColor === null ? undefined : session.textColor) : b.dataset.c;
+    b.setAttribute('aria-checked', String(v !== undefined && v === session.textColor));
+  });
+  if (session.textColor && !known) $('#text-custom').value = session.textColor;
 }
 
 function buildShots() {
@@ -843,6 +903,7 @@ function snapshot() {
     showDate: session.showDate,
     font: session.font,
     fontTouched: session.fontTouched,
+    text: [session.textColor, session.textStyle, session.textSize, session.textAlign, session.textShape, session.dateStyle],
     stickers: session.stickers,
     adjust: Array.from(session.adjust, (a) => a || null)
   });
@@ -887,6 +948,7 @@ function restore(json) {
   session.showDate = d.showDate;
   session.font = d.font;
   session.fontTouched = d.fontTouched;
+  [session.textColor, session.textStyle, session.textSize, session.textAlign, session.textShape, session.dateStyle] = d.text;
   session.stickers = d.stickers;
   session.adjust = d.adjust.map((a) => a || undefined);
   session.adjRev++;

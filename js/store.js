@@ -44,6 +44,12 @@ export const session = {
   caption: '',
   showDate: true,
   font: 'script',
+  textColor: null,     // null = the design's own text colour
+  textStyle: 'plain',  // plain | outline | shadow | sticker
+  textSize: 1,         // multiplier on the caption size
+  textAlign: 'center', // left | center | right
+  textShape: 'straight', // straight | arc | wave
+  dateStyle: 'plain',  // plain | film | digital | stamp
   fontTouched: false,  // true once the user picks a caption font themselves
   stickers: [],        // { id, char, x, y, size, rot }  x/y/size are fractions of strip width/height
   selectedId: null,

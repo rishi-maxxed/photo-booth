@@ -142,7 +142,7 @@ Nobody lines up perfectly. Move and zoom every photo inside its slot with a drag
 <td width="33%" valign="top">
 
 ### ✍️ Captions and dates
-Write your own caption and show today's date, in 14 lettering styles, from script, marker and signature to bold block, comic and pixel.
+Write your own caption in 14 lettering styles, then make it yours: any colour, plain, outline, shadow or label effect, size, left, centre or right, and a straight, arched or wavy line. The date comes in plain, film camera, digital and stamp styles.
 
 </td>
 <td width="33%" valign="top">

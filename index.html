@@ -181,6 +181,35 @@
             <label class="switch"><input type="checkbox" id="show-date" checked><span class="track"></span><span>Show today's date</span></label>
             <span class="field-label">Caption style</span>
             <div class="font-chips" id="chips-font"></div>
+            <span class="field-label">Text colour</span>
+            <div class="swatches" id="text-swatches" role="radiogroup" aria-label="Text colour"></div>
+            <span class="field-label">Text effect</span>
+            <div class="opt-seg" data-opt="textStyle" role="radiogroup" aria-label="Text effect">
+              <button type="button" role="radio" data-v="plain">Plain</button>
+              <button type="button" role="radio" data-v="outline">Outline</button>
+              <button type="button" role="radio" data-v="shadow">Shadow</button>
+              <button type="button" role="radio" data-v="sticker">Label</button>
+            </div>
+            <label class="adj-row" for="text-size"><span>Text size</span><input id="text-size" type="range" min="70" max="130" step="5" value="100"><output id="text-size-val">100%</output></label>
+            <span class="field-label">Position</span>
+            <div class="opt-seg" data-opt="textAlign" role="radiogroup" aria-label="Text position">
+              <button type="button" role="radio" data-v="left">Left</button>
+              <button type="button" role="radio" data-v="center">Centre</button>
+              <button type="button" role="radio" data-v="right">Right</button>
+            </div>
+            <span class="field-label">Shape</span>
+            <div class="opt-seg" data-opt="textShape" role="radiogroup" aria-label="Text shape">
+              <button type="button" role="radio" data-v="straight">Straight</button>
+              <button type="button" role="radio" data-v="arc">Arc</button>
+              <button type="button" role="radio" data-v="wave">Wave</button>
+            </div>
+            <span class="field-label">Date style</span>
+            <div class="opt-seg" data-opt="dateStyle" role="radiogroup" aria-label="Date style">
+              <button type="button" role="radio" data-v="plain">Plain</button>
+              <button type="button" role="radio" data-v="film">Film</button>
+              <button type="button" role="radio" data-v="digital">Digital</button>
+              <button type="button" role="radio" data-v="stamp">Stamp</button>
+            </div>
           </div>
 
           <div class="pane" id="pane-photos" role="tabpanel" hidden>

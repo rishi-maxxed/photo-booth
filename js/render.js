@@ -197,48 +197,234 @@ function drawFooter(ctx, layout, design, state, scale) {
   }
 
   const font = getFont(state.font);
-  const maxW = rect.w - (design.plate ? 60 : 2 * M);
+  const opts = textOptions(state);
+  const pad = design.plate ? 30 : M;
+  const maxW = rect.w - 2 * pad;
+  const shaped = opts.shape !== 'straight';
+  const align = shaped ? 'center' : opts.align;
+  const ax = align === 'left' ? rect.x + pad : align === 'right' ? rect.x + rect.w - pad : rect.x + rect.w / 2;
+  const fill = opts.color || design.ink;
+  const edge = lum(fill) > 0.6 ? '#111111' : '#ffffff';
   const dateFamily =
-    state.font === 'pixel'
-      ? font.family
-      : state.font === 'mono'
-        ? font.family
-        : '"Bricolage Grotesque", system-ui, sans-serif';
+    state.font === 'pixel' || state.font === 'mono' ? font.family : '"Bricolage Grotesque", system-ui, sans-serif';
   const dateWeight = state.font === 'pixel' ? '400' : '700';
   const pixelDate = state.font === 'pixel';
 
   ctx.save();
-  ctx.fillStyle = design.ink;
-  ctx.textAlign = 'center';
+  ctx.textAlign = align;
   ctx.textBaseline = 'middle';
-  if (design.glowText) {
-    ctx.shadowColor = design.ink;
-    ctx.shadowBlur = 12 * scale;
-  }
 
+  // sizes
   let capSize = 0;
   if (caption) {
-    capSize = 56 * font.scale;
+    capSize = 56 * font.scale * opts.size;
     ctx.font = `${font.weight} ${capSize}px ${font.family}`;
     const w = ctx.measureText(caption).width;
-    if (w > maxW) capSize *= maxW / w;
+    const limit = opts.style === 'sticker' && !shaped ? maxW - 44 : maxW;
+    if (w > limit) capSize *= limit / w;
     ctx.font = `${font.weight} ${capSize}px ${font.family}`;
   }
-  const dateSize = caption ? (pixelDate ? 14 : 26) : pixelDate ? 20 : 34;
+  const boxed = opts.dateStyle === 'film' || opts.dateStyle === 'digital';
+  let dateSize = caption ? (pixelDate ? 14 : 26) : pixelDate ? 20 : 34;
+  if (opts.dateStyle === 'digital') dateSize = caption ? 14 : 20;
+  else if (opts.dateStyle !== 'plain') dateSize = caption ? 26 : 34;
+  const datePad = boxed ? 14 : opts.dateStyle === 'stamp' ? 12 : 0;
   const gap = caption && date ? 10 : 0;
-  const total = (caption ? capSize : 0) + gap + (date ? dateSize : 0);
+  const blockFor = (s) => (caption ? s + (opts.style === 'sticker' && !shaped ? 22 : 0) + (opts.shape === 'arc' ? s * 0.5 : opts.shape === 'wave' ? s * 0.4 : 0) : 0);
+  const dateBlock = date ? dateSize + datePad : 0;
+  // big text, labels and curves must still fit the footer
+  while (caption && capSize > 14 && blockFor(capSize) + gap + dateBlock > rect.h - 14) capSize *= 0.95;
+  if (caption) ctx.font = `${font.weight} ${capSize}px ${font.family}`;
+  const capBlock = blockFor(capSize);
+  const total = capBlock + gap + dateBlock;
   let y = rect.y + (rect.h - total) / 2;
-  const cx = rect.x + rect.w / 2;
 
   if (caption) {
-    ctx.font = `${font.weight} ${capSize}px ${font.family}`;
-    ctx.fillText(caption, cx, y + capSize / 2);
-    y += capSize + gap;
+    const cy = y + capBlock / 2;
+    drawCaption(ctx, caption, { x: ax, y: cy, size: capSize, align, fill, edge, opts, shaped, font, design, scale });
+    y += capBlock + gap;
   }
   if (date) {
-    ctx.font = `${dateWeight} ${dateSize}px ${dateFamily}`;
-    ctx.fillText(date, cx, y + dateSize / 2);
+    drawDate(ctx, date, { x: ax, y: y + (dateSize + datePad) / 2, size: dateSize, align, fill, dateFamily, dateWeight, opts, design, scale, font, maxW });
   }
+  ctx.restore();
+}
+
+function lum(hex) {
+  const m = /^#?([0-9a-f]{6})$/i.exec(hex || '');
+  if (!m) return 0;
+  const n = parseInt(m[1], 16);
+  return (0.299 * (n >> 16) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) / 255;
+}
+
+export const TEXT_DEFAULTS = { textColor: null, textStyle: 'plain', textSize: 1, textAlign: 'center', textShape: 'straight', dateStyle: 'plain' };
+
+function textOptions(state) {
+  return {
+    color: state.textColor || null,
+    style: state.textStyle || 'plain',
+    size: state.textSize || 1,
+    align: state.textAlign || 'center',
+    shape: state.textShape || 'straight',
+    dateStyle: state.dateStyle || 'plain'
+  };
+}
+
+function paintText(ctx, str, x, y, o) {
+  const { size, fill, edge, style } = o;
+  if (style === 'shadow') {
+    ctx.fillStyle = edge;
+    ctx.fillText(str, x + size * 0.06, y + size * 0.06);
+  } else if (style === 'outline') {
+    ctx.lineJoin = 'round';
+    ctx.lineWidth = Math.max(2, size * 0.16);
+    ctx.strokeStyle = edge;
+    ctx.strokeText(str, x, y);
+  }
+  ctx.fillStyle = fill;
+  ctx.fillText(str, x, y);
+}
+
+function drawCaption(ctx, text, o) {
+  const { x, y, size, align, fill, edge, opts, shaped, font, design, scale } = o;
+  ctx.font = `${font.weight} ${size}px ${font.family}`;
+  const glow = design.glowText && opts.style === 'plain';
+  const style = shaped && opts.style === 'sticker' ? 'outline' : opts.style;
+  const paint = { size, fill, edge, style: style === 'sticker' ? 'plain' : style };
+
+  if (!shaped) {
+    if (opts.style === 'sticker') {
+      const w = ctx.measureText(text).width;
+      const bw = w + 40;
+      const bh = size * 1.2 + 10;
+      const bx = align === 'left' ? x : align === 'right' ? x - bw : x - bw / 2;
+      const dark = lum(fill) > 0.6;
+      ctx.save();
+      const pivotX = bx + bw / 2;
+      ctx.translate(pivotX, y);
+      ctx.rotate(-0.035);
+      ctx.translate(-pivotX, -y);
+      roundRectPath(ctx, bx + 5, y - bh / 2 + 5, bw, bh, 12);
+      ctx.fillStyle = '#111111';
+      ctx.fill();
+      roundRectPath(ctx, bx, y - bh / 2, bw, bh, 12);
+      ctx.fillStyle = dark ? '#111111' : '#ffffff';
+      ctx.fill();
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = '#111111';
+      ctx.stroke();
+      ctx.textAlign = 'center';
+      ctx.fillStyle = fill;
+      ctx.fillText(text, pivotX, y + size * 0.03);
+      ctx.restore();
+      return;
+    }
+    ctx.save();
+    if (glow) {
+      ctx.shadowColor = fill;
+      ctx.shadowBlur = 12 * scale;
+    }
+    paintText(ctx, text, x, y, paint);
+    ctx.restore();
+    return;
+  }
+
+  // curved or wavy: place one character at a time
+  ctx.textAlign = 'center';
+  const chars = [...text];
+  const widths = chars.map((c) => ctx.measureText(c).width);
+  const sum = widths.reduce((a, b) => a + b, 0);
+  let s = -sum / 2;
+  ctx.save();
+  if (glow) {
+    ctx.shadowColor = fill;
+    ctx.shadowBlur = 12 * scale;
+  }
+  const R = sum * 1.6;
+  const rise = R * (1 - Math.cos(sum / 2 / R));
+  chars.forEach((c, i) => {
+    const mid = s + widths[i] / 2;
+    s += widths[i];
+    ctx.save();
+    if (opts.shape === 'arc') {
+      const a = mid / R;
+      ctx.translate(x + R * Math.sin(a), y - rise / 2 + R * (1 - Math.cos(a)));
+      ctx.rotate(a);
+    } else {
+      const amp = size * 0.2;
+      const k = (Math.PI * 2 * 1.5) / sum;
+      ctx.translate(x + mid, y + amp * Math.sin(mid * k));
+      ctx.rotate(Math.atan(amp * k * Math.cos(mid * k)));
+    }
+    paintText(ctx, c, 0, 0, paint);
+    ctx.restore();
+  });
+  ctx.restore();
+}
+
+function drawDate(ctx, text, o) {
+  const { x, y, size, align, fill, dateFamily, dateWeight, opts, design, scale, font, maxW } = o;
+  const now = new Date();
+  const two = (n) => String(n).padStart(2, '0');
+  const yy = two(now.getFullYear() % 100);
+  const mon = now.toLocaleDateString('en', { month: 'short' }).toUpperCase();
+  const style = opts.dateStyle;
+  ctx.save();
+  if (style === 'plain') {
+    ctx.font = `${dateWeight} ${size}px ${dateFamily}`;
+    ctx.fillStyle = fill;
+    if (design.glowText) {
+      ctx.shadowColor = fill;
+      ctx.shadowBlur = 12 * scale;
+    }
+    ctx.fillText(text, x, y);
+    ctx.restore();
+    return;
+  }
+  let str;
+  let family;
+  let color;
+  let bg = null;
+  if (style === 'film') {
+    str = `'${yy}  ${two(now.getMonth() + 1)}  ${two(now.getDate())}`;
+    family = 'ui-monospace, Consolas, "Courier New", monospace';
+    color = '#ff8a1f';
+    bg = '#1d1d1d';
+  } else if (style === 'digital') {
+    str = `${two(now.getDate())}-${two(now.getMonth() + 1)}-${yy}`;
+    family = '"Press Start 2P", monospace';
+    color = '#6dff6d';
+    bg = '#0c140c';
+  } else {
+    str = `${now.getDate()} ${mon} ${now.getFullYear()}`;
+    family = font.id === 'comic' ? font.family : '"Bangers", Impact, sans-serif';
+    color = '#e0283a';
+  }
+  const weight = style === 'film' ? '700' : '400';
+  ctx.font = `${weight} ${size}px ${family}`;
+  let w = ctx.measureText(str).width;
+  const boxW = w + 28;
+  const bx = align === 'left' ? x : align === 'right' ? x - boxW : x - boxW / 2;
+  const cx = bx + boxW / 2;
+  const bh = size + 14;
+  if (bg) {
+    roundRectPath(ctx, bx, y - bh / 2, boxW, bh, 8);
+    ctx.fillStyle = bg;
+    ctx.fill();
+    ctx.shadowColor = color;
+    ctx.shadowBlur = 8 * scale;
+  } else {
+    ctx.translate(cx, y);
+    ctx.rotate(-0.09);
+    ctx.translate(-cx, -y);
+    ctx.lineWidth = 4;
+    ctx.strokeStyle = color;
+    roundRectPath(ctx, bx, y - bh / 2, boxW, bh, 5);
+    ctx.stroke();
+  }
+  ctx.textAlign = 'center';
+  ctx.fillStyle = color;
+  ctx.fillText(str, cx, y + 1);
   ctx.restore();
 }
 
