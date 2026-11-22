@@ -145,7 +145,7 @@ $('#btn-upload').addEventListener('click', async () => {
     push('edit');
     apply('edit');
   } catch {
-    toast('One of those photos could not be opened. Try a JPEG or PNG.');
+    toast('One of those files could not be used. Choose JPEG or PNG photos under 30 MB.');
   }
 });
 

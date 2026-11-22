@@ -72,6 +72,7 @@ export function init(h) {
       showMessage('unknown', 'The camera disconnected.');
     }
   };
+  window.addEventListener('pagehide', () => camera.stop());
   document.addEventListener('visibilitychange', () => {
     if (!active) return;
     if (document.hidden) {
@@ -204,7 +205,7 @@ async function chooseInstead() {
     }
     finish();
   } catch {
-    toast('One of those photos could not be opened. Try a JPEG or PNG.');
+    toast('One of those files could not be used. Choose JPEG or PNG photos under 30 MB.');
   }
 }
 

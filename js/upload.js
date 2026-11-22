@@ -18,7 +18,12 @@ export function pickImages(multiple) {
   });
 }
 
+const MAX_BYTES = 30 * 1024 * 1024; // per photo
+const MAX_PIXELS = 100e6; // width x height, keeps a decompression bomb from freezing the tab
+
 async function decode(file) {
+  if (!/^image\//.test(file.type)) throw new Error('not an image');
+  if (file.size > MAX_BYTES) throw new Error('file too large');
   if (window.createImageBitmap) {
     try {
       return await createImageBitmap(file, { imageOrientation: 'from-image' });
@@ -43,6 +48,10 @@ export async function filesToCanvases(files, maxSide = 1920) {
     const src = await decode(f);
     const w = src.width || src.naturalWidth;
     const h = src.height || src.naturalHeight;
+    if (!w || !h || w * h > MAX_PIXELS) {
+      if (src.close) src.close();
+      throw new Error('image too large');
+    }
     const k = Math.min(1, maxSide / Math.max(w, h));
     const c = document.createElement('canvas');
     c.width = Math.round(w * k);

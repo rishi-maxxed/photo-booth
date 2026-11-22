@@ -76,6 +76,7 @@ export function el(tag, props = {}, ...children) {
   for (const [k, v] of Object.entries(props)) {
     if (k === 'class') node.className = v;
     else if (k === 'text') node.textContent = v;
+    else if (k === 'style' && typeof v === 'object') for (const [p, val] of Object.entries(v)) node.style.setProperty(p, val); // CSSOM, allowed by the page's CSP
     else if (k.startsWith('on')) node.addEventListener(k.slice(2), v);
     else node.setAttribute(k, v);
   }

@@ -215,3 +215,7 @@ Designed and built by **Rishi Jha**
 [GitHub](https://github.com/rishi-maxxed) &nbsp;·&nbsp; [LinkedIn](https://linkedin.com/in/rishi-jha-xyz)
 
 </div>
+
+## Security and privacy
+
+Photos stay on your device. See [SECURITY.md](SECURITY.md) for the protections in place and how to report a problem. When you use **Share**, the strip goes to the app you pick in your device's share sheet.

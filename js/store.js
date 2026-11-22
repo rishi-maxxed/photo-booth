@@ -16,13 +16,19 @@ const defaults = {
 function load() {
   try {
     const raw = localStorage.getItem(KEY) ?? localStorage.getItem(OLD_KEY);
-    return raw ? JSON.parse(raw) : {};
+    const data = raw ? JSON.parse(raw) : {};
+    return data && typeof data === 'object' && !Array.isArray(data) ? data : {};
   } catch {
     return {};
   }
 }
 
-export const settings = { ...defaults, ...load() };
+export const settings = { ...defaults };
+const stored = load();
+// only known keys, and only values of the right type, so edited or corrupted storage can't leak in
+for (const key of Object.keys(defaults)) {
+  if (typeof stored[key] === typeof defaults[key]) settings[key] = stored[key];
+}
 if (![4, 5].includes(settings.shots)) settings.shots = 4;
 if (![3, 5, 10].includes(settings.timer)) settings.timer = 3;
 

@@ -148,14 +148,14 @@ export async function printSheet(state) {
   const blob = await sheetBlob(state);
   const url = URL.createObjectURL(blob);
   const root = document.getElementById('print-root');
-  root.innerHTML = '';
+  root.replaceChildren();
   const img = new Image();
   img.alt = 'Photo strip print sheet';
   root.appendChild(img);
   img.src = url;
   await img.decode();
   const cleanup = () => {
-    root.innerHTML = '';
+    root.replaceChildren();
     URL.revokeObjectURL(url);
     window.removeEventListener('afterprint', cleanup);
   };

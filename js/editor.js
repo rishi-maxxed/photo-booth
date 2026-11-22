@@ -319,7 +319,7 @@ function build() {
         class: 'fontchip',
         'data-font': f.id,
         'aria-pressed': 'false',
-        style: `font-family:${f.family};font-weight:${f.weight}`,
+        style: { 'font-family': f.family, 'font-weight': String(f.weight) },
         text: f.name,
         onclick: () => {
           session.font = f.id;
@@ -337,7 +337,7 @@ function build() {
   const sw = $('#text-swatches');
   sw.replaceChildren(
     el('button', { type: 'button', class: 'swatch auto', role: 'radio', 'data-c': 'auto', 'aria-label': 'Match the design', title: 'Match the design' }),
-    ...TEXT_COLORS.map((c) => el('button', { type: 'button', class: 'swatch', role: 'radio', 'data-c': c, 'aria-label': `Colour ${c}`, style: `--c:${c}` })),
+    ...TEXT_COLORS.map((c) => el('button', { type: 'button', class: 'swatch', role: 'radio', 'data-c': c, 'aria-label': `Colour ${c}`, style: { '--c': c } })),
     el('label', { class: 'swatch custom', role: 'radio', 'data-c': 'custom', title: 'Pick any colour' }, el('input', { type: 'color', id: 'text-custom', value: '#ff3b4e', 'aria-label': 'Custom text colour' }))
   );
   sw.addEventListener('click', (ev) => {
