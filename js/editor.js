@@ -8,6 +8,7 @@ import { DESIGNS, FONTS, STICKERS, getDesign } from './designs.js';
 import { STICKER_PACKS, loadStickers, stickerSrc } from './stickers.js';
 import { FILTERS } from './filters.js';
 import { LOOKS } from './looks.js';
+import { setAsciiDetail, isAscii, ASCII_DETAIL } from './ascii.js';
 import { FRAMES } from './frames.js';
 import {
   renderBase,
@@ -43,6 +44,7 @@ const thumbs = { looks: [], layout: [], design: [], frame: [], filter: [] };
 // ----- state helpers --------------------------------------------------------
 
 function renderState(over = {}) {
+  setAsciiDetail(over.asciiDetail ?? session.asciiDetail); // the ASCII filters read this while drawing
   return {
     photos: session.photos,
     layout: session.layout,
@@ -101,6 +103,7 @@ function baseFingerprint() {
     session.design,
     session.frame,
     session.filter,
+    session.asciiDetail,
     session.caption,
     session.showDate,
     session.font,
@@ -172,7 +175,9 @@ function lookThumb(id) {
     caption: look.caption,
     font: look.font,
     showDate: true,
-    ...TEXT_DEFAULTS
+    asciiDetail: ASCII_DETAIL.default,
+    ...TEXT_DEFAULTS,
+    ...(look.text || {})
   });
   const L = getLayout(st.layout, st.photos.length);
   const k = Math.min(200 / L.H, 280 / L.W);
@@ -187,11 +192,12 @@ function applyLook(id) {
   session.design = look.design;
   session.frame = 'design';
   session.filter = look.filter;
+  session.asciiDetail = ASCII_DETAIL.default;
   session.caption = look.caption;
   session.font = look.font;
   session.fontTouched = true;
   session.showDate = true;
-  Object.assign(session, TEXT_DEFAULTS);
+  Object.assign(session, TEXT_DEFAULTS, look.text || {});
   session.stickers = look.stickers.map((s) => ({ ...s, id: ++stickerSeq }));
   session.selectedId = null;
   markDirty('layout', 'design', 'frame', 'filter');
@@ -227,6 +233,7 @@ function refreshThumbs(kind) {
       });
     }
     else {
+      setAsciiDetail(session.asciiDetail);
       const f = photoToCanvas(session.photos[0], 160, 120, { mirror: settings.mirrorSaved, filter: t.id, adj: session.adjust[0] });
       src = f;
     }
@@ -290,6 +297,7 @@ function build() {
         session.filter = id;
         markDirty('layout', 'design', 'frame');
         markPressed();
+        syncAsciiRow();
         schedule();
         refreshCurrent();
       })
@@ -333,6 +341,16 @@ function build() {
   $('#caption').addEventListener('input', (e) => {
     session.caption = e.target.value;
     schedule();
+  });
+  $('#ascii-detail').addEventListener('input', (ev) => {
+    session.asciiDetail = Number(ev.target.value);
+    syncAsciiRow();
+    baseCanvas = null;
+    schedule();
+  });
+  $('#ascii-detail').addEventListener('change', () => {
+    markDirty('layout', 'design', 'frame', 'filter');
+    refreshCurrent();
   });
   const sw = $('#text-swatches');
   sw.replaceChildren(
@@ -439,7 +457,14 @@ function refreshCurrent() {
   if (built && session.photos.length) syncAdjust();
 }
 
+function syncAsciiRow() {
+  $('#ascii-row').hidden = !isAscii(session.filter);
+  $('#ascii-detail').value = session.asciiDetail;
+  $('#ascii-detail-val').textContent = `${session.asciiDetail}`;
+}
+
 function syncText() {
+  syncAsciiRow();
   $('#caption').value = session.caption;
   $('#show-date').checked = session.showDate;
   $('#mirror-saved').checked = settings.mirrorSaved;
@@ -899,6 +924,7 @@ function snapshot() {
     design: session.design,
     frame: session.frame,
     filter: session.filter,
+    ascii: session.asciiDetail,
     caption: session.caption,
     showDate: session.showDate,
     font: session.font,
@@ -944,6 +970,7 @@ function restore(json) {
   session.design = d.design;
   session.frame = d.frame;
   session.filter = d.filter;
+  session.asciiDetail = d.ascii ?? ASCII_DETAIL.default;
   session.caption = d.caption;
   session.showDate = d.showDate;
   session.font = d.font;
@@ -1044,6 +1071,30 @@ function bindExport() {
     busy(e.currentTarget, 'Making GIF...', async (setLabel) => {
       const blob = await exp.gifBlob(renderState(), (p) => setLabel(`Making GIF ${Math.round(p * 100)}%`));
       exp.download(blob, `flickora-${exp.stamp()}.gif`);
+      toast('Saved. Check your downloads.');
+    })
+  );
+  const stripText = () => {
+    const photos = session.photos.map((p, i) =>
+      photoToCanvas(p, 480, 360, { mirror: settings.mirrorSaved, adj: session.adjust[i] })
+    );
+    return exp.stripAscii(photos, session.caption, session.showDate);
+  };
+  $('#exp-copy').addEventListener('click', (e) =>
+    busy(e.currentTarget, 'Copying...', async () => {
+      const text = stripText();
+      try {
+        await navigator.clipboard.writeText(text);
+        toast('Copied. Paste it in a code block to keep the shape.');
+      } catch {
+        exp.download(new Blob([text], { type: 'text/plain' }), `flickora-ascii-${exp.stamp()}.txt`);
+        toast('Could not copy here, so it was saved as a .txt file.');
+      }
+    })
+  );
+  $('#exp-txt').addEventListener('click', (e) =>
+    busy(e.currentTarget, 'Preparing...', async () => {
+      exp.download(new Blob([stripText()], { type: 'text/plain' }), `flickora-ascii-${exp.stamp()}.txt`);
       toast('Saved. Check your downloads.');
     })
   );

@@ -10,6 +10,7 @@ const defaults = {
   sound: true,
   flash: true,
   prompts: true,     // show a pose idea during each countdown
+  liveAscii: false,  // booth preview drawn as ASCII text
   mirrorSaved: false // mirror the saved photos (selfie look) instead of true view
 };
 
@@ -47,6 +48,7 @@ export const session = {
   design: 'classic',
   frame: 'design',     // 'design' = use the design's own photo border, else a frame id
   filter: 'none',
+  asciiDetail: 70,     // columns of text across each photo for the ASCII filters
   caption: '',
   showDate: true,
   font: 'script',

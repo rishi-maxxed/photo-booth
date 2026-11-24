@@ -49,6 +49,7 @@ The look is **Comic Pop**: halftone paper, thick ink outlines, hard shadows, a b
 - Screen flash and synthesized shutter sounds
 - Pose prompts in a speech bubble ("Make a silly face!") that you can switch off in settings
 - Press **Space** on a desktop browser to start the countdown
+- **ASCII preview**: tap the `</>` button in the booth to see the camera as green text while you pose
 - Framing guide so everyone fits
 - Retake any single pose without starting over
 
@@ -95,9 +96,20 @@ The look is **Comic Pop**: halftone paper, thick ink outlines, hard shadows, a b
 </tr>
 </table>
 
+### 🖥️ ASCII art
+
+Four ASCII filters turn every photo into text: **ASCII green**, **ASCII colour**, **ASCII paper** and **Binary**, with a **Detail** slider for how fine the characters are. The **Terminal** look sets it all up in one tap. In the Save sheet, **Copy as text** and **Save as text file** give you the whole strip as ASCII art to paste into Discord or a README.
+
+<table>
+<tr>
+<td width="50%" align="center"><img src="docs/desktop-ascii-filter.jpg" alt="ASCII filters with the Detail slider" width="100%"><br><sub><b>ASCII filters</b></sub></td>
+<td width="50%" align="center"><img src="docs/desktop-ascii-terminal.jpg" alt="The Terminal look" width="100%"><br><sub><b>Terminal look</b></sub></td>
+</tr>
+</table>
+
 ### ⚡ Quick looks, undo and redo
 
-One tap on **Birthday**, **Date**, **Retro**, **Party**, **Friends** or **Love** sets the design, filter, caption, lettering and stickers together. Change your mind? **Undo** and **Redo** sit next to *New photos*, or use `Ctrl`/`Cmd` + `Z` and `Ctrl` + `Y` on a desktop.
+One tap on **Birthday**, **Date**, **Retro**, **Party**, **Friends**, **Love** or **Terminal** sets the design, filter, caption, lettering and stickers together. Change your mind? **Undo** and **Redo** sit next to *New photos*, or use `Ctrl`/`Cmd` + `Z` and `Ctrl` + `Y` on a desktop.
 
 <br>
 

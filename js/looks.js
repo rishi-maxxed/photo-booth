@@ -81,6 +81,19 @@ export const LOOKS = [
       { char: 'svg:doodle-3', x: 0.2, y: 0.8, size: 0.12, rot: 0 },
       { char: 'svg:doodle-2', x: 0.8, y: 0.84, size: 0.1, rot: 0.2 }
     ]
+  },
+  {
+    id: 'terminal',
+    name: 'Terminal',
+    design: 'midnight',
+    filter: 'ascii-term',
+    caption: '> hello_world',
+    font: 'mono',
+    text: { textColor: '#6dff6d', textStyle: 'plain', dateStyle: 'digital' },
+    stickers: [
+      { char: 'svg:pixel-1', x: 0.82, y: 0.14, size: 0.14, rot: 0.1 },
+      { char: 'svg:pixel-3', x: 0.18, y: 0.78, size: 0.14, rot: -0.1 }
+    ]
   }
 ];
 

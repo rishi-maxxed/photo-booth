@@ -1,6 +1,8 @@
 // Photo filters implemented as plain pixel math so they behave the same in every
 // browser (CanvasRenderingContext2D.filter is not supported everywhere).
 
+import { asciiFilter, isAscii } from './ascii.js';
+
 export const FILTERS = [
   { id: 'none', name: 'Original' },
   { id: 'bw', name: 'Black and white' },
@@ -11,7 +13,11 @@ export const FILTERS = [
   { id: 'vivid', name: 'Vivid' },
   { id: 'fade', name: 'Faded' },
   { id: 'noir', name: 'Noir' },
-  { id: 'pixel', name: 'Pixel' }
+  { id: 'pixel', name: 'Pixel' },
+  { id: 'ascii-term', name: 'ASCII green' },
+  { id: 'ascii-color', name: 'ASCII colour' },
+  { id: 'ascii-news', name: 'ASCII paper' },
+  { id: 'ascii-bin', name: 'Binary' }
 ];
 
 const PARAMS = {
@@ -94,6 +100,7 @@ function vignette(ctx, w, h, strength) {
 
 // Applies the filter to the canvas in place and returns it.
 export function applyFilter(canvas, id) {
+  if (isAscii(id)) return asciiFilter(canvas, id);
   const p = PARAMS[id];
   if (!p) return canvas;
   const w = canvas.width;

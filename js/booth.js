@@ -1,9 +1,10 @@
 // The booth screen: live camera, framing guide, countdown sequence, shutter
 // flash, per-shot thumbnails and single-shot retakes.
 
+import { drawAsciiLive } from './ascii.js';
 import { $, el, sleep, toast } from './dom.js';
 import { Camera } from './camera.js';
-import { settings, session, setPhoto, setPhotos, resetEdits } from './store.js';
+import { settings, session, setPhoto, setPhotos, resetEdits, saveSettings } from './store.js';
 import * as sfx from './audio.js';
 import { pickImages, filesToCanvases } from './upload.js';
 
@@ -18,6 +19,9 @@ const statusEl = $('#booth-status');
 const shutter = $('#shutter');
 const shutterLabel = $('#shutter-label');
 const flipBtn = $('#booth-flip');
+const asciiBtn = $('#booth-ascii');
+const asciiCanvas = $('#ascii-live');
+let asciiRaf = 0;
 const msg = $('#booth-msg');
 const promptEl = $('#prompt');
 
@@ -73,6 +77,11 @@ export function init(h) {
     }
   };
   window.addEventListener('pagehide', () => camera.stop());
+  asciiBtn.addEventListener('click', () => {
+    settings.liveAscii = !settings.liveAscii;
+    saveSettings();
+    syncAscii();
+  });
   document.addEventListener('visibilitychange', () => {
     if (!active) return;
     if (document.hidden) {
@@ -131,6 +140,27 @@ export function close() {
 
 // ----- camera ---------------------------------------------------------------
 
+// Live ASCII preview: an overlay drawn from the video; the photos themselves are still normal.
+function asciiLoop(last = 0) {
+  asciiRaf = 0;
+  if (!active || !settings.liveAscii || document.hidden) return;
+  asciiRaf = requestAnimationFrame((t) => {
+    if (t - last > 66 && camera.active) {
+      drawAsciiLive(video, asciiCanvas, camera.mirrored);
+      last = t;
+    }
+    asciiLoop(last);
+  });
+}
+
+function syncAscii() {
+  asciiBtn.setAttribute('aria-pressed', String(settings.liveAscii));
+  asciiCanvas.hidden = !settings.liveAscii;
+  cancelAnimationFrame(asciiRaf);
+  asciiRaf = 0;
+  if (settings.liveAscii) asciiLoop();
+}
+
 async function startCamera() {
   hideMessage();
   shutter.disabled = true;
@@ -143,6 +173,7 @@ async function startCamera() {
     video.classList.toggle('mirror', camera.mirrored);
     flipBtn.hidden = camera.cameraCount < 2;
     layoutGuide();
+    syncAscii();
     shutter.disabled = false;
   } catch (err) {
     if (active) showMessage(err.code || 'unknown', err.message);

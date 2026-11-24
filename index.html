@@ -72,6 +72,7 @@
   <section id="screen-booth" class="screen booth" hidden>
     <div class="stage" id="stage">
       <video id="video" playsinline muted autoplay></video>
+      <canvas id="ascii-live" class="ascii-live" aria-hidden="true" hidden></canvas>
       <div class="guide" id="guide" aria-hidden="true" hidden></div>
       <div class="count" id="count" aria-live="assertive" hidden></div>
       <div class="prompt" id="prompt" aria-live="polite" hidden></div>
@@ -82,9 +83,12 @@
           <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
         </button>
         <div class="bulbs" id="bulbs" role="img" aria-label="Photos taken"></div>
+        <div class="booth-right">
+        <button id="booth-ascii" class="icon-btn glass ascii-btn" type="button" aria-label="ASCII preview" aria-pressed="false" title="Show the camera as ASCII text">&lt;/&gt;</button>
         <button id="booth-flip" class="icon-btn glass" type="button" aria-label="Switch camera" hidden>
           <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 7h-3l-2-2H9L7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1z"/><path d="M9.5 13.5a2.8 2.8 0 0 1 5 -1.2M14.5 13.5a2.8 2.8 0 0 1-5 1.2"/></svg>
         </button>
+      </div>
       </div>
 
       <div class="booth-msg" id="booth-msg" hidden>
@@ -159,7 +163,10 @@
               <button type="button" class="btn btn-small" id="adj-reset-all">Reset all</button>
             </div>
           </div>
-          <div class="pane" id="pane-filter" role="tabpanel" hidden><div class="chips" id="chips-filter"></div></div>
+          <div class="pane" id="pane-filter" role="tabpanel" hidden>
+            <div class="chips" id="chips-filter"></div>
+            <label class="adj-row" id="ascii-row" for="ascii-detail" hidden><span>Detail</span><input id="ascii-detail" type="range" min="40" max="120" step="5" value="70"><output id="ascii-detail-val">70</output></label>
+          </div>
 
           <div class="pane" id="pane-stickers" role="tabpanel" hidden>
             <div class="packs" id="sticker-packs" role="group" aria-label="Sticker packs"></div>
@@ -232,6 +239,8 @@
       <button type="button" class="export-item" id="exp-story"><strong>Story size (9:16)</strong><span>For Instagram and WhatsApp status</span></button>
       <button type="button" class="export-item" id="exp-share" hidden><strong>Share</strong><span>Send it to another app</span></button>
       <button type="button" class="export-item" id="exp-gif"><strong>Animated GIF</strong><span>Your photos as a looping clip</span></button>
+      <button type="button" class="export-item" id="exp-copy"><strong>Copy as text</strong><span>The strip as ASCII art, to paste anywhere</span></button>
+      <button type="button" class="export-item" id="exp-txt"><strong>Save as text file</strong><span>A .txt file with the ASCII strip</span></button>
       <button type="button" class="export-item" id="exp-sheet"><strong>4 x 6 print sheet</strong><span>Two strips on one page</span></button>
       <button type="button" class="export-item" id="exp-print"><strong>Print</strong><span>Send the 4 x 6 sheet to a printer</span></button>
     </div>

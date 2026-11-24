@@ -3,6 +3,7 @@
 import { GIFEncoder, quantize, applyPalette } from './vendor/gifenc.js';
 import { renderFull, photoToCanvas, exportScale } from './render.js';
 import { getLayout } from './layouts.js';
+import { asciiText } from './ascii.js';
 
 export function canvasToBlob(canvas, type = 'image/png', quality) {
   return new Promise((resolve, reject) => {
@@ -161,4 +162,27 @@ export async function printSheet(state) {
   };
   window.addEventListener('afterprint', cleanup);
   window.print();
+}
+
+// The whole strip as plain text: each photo as ASCII, then the caption and date, centred.
+export function stripAscii(photos, caption, showDate, cols = 56) {
+  const bar = '+' + '-'.repeat(cols + 2) + '+';
+  const row = (s) => '| ' + s.padEnd(cols) + ' |';
+  const centre = (s) => {
+    const t = s.slice(0, cols);
+    return ' '.repeat(Math.floor((cols - t.length) / 2)) + t;
+  };
+  const out = [bar];
+  for (const p of photos) {
+    for (const line of asciiText(p, cols).split('\n')) out.push(row(line));
+    out.push(bar);
+  }
+  const foot = [];
+  if (caption) foot.push(centre(caption));
+  if (showDate) foot.push(centre(new Date().toLocaleDateString('en', { year: 'numeric', month: 'short', day: 'numeric' })));
+  if (foot.length) {
+    for (const f of foot) out.push(row(f));
+    out.push(bar);
+  }
+  return out.join('\n') + '\n';
 }
